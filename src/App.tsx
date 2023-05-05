@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import logo from './assets/logo.svg'
 function App() {
-  const [count, setCount] = useState(0)
+	return (
+		<>
+			<div className='header'>
+				<div className='container'>
+					<div className='Logo'>
+						<img src={logo} alt='logo' />
+					</div>
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+					<nav className='menu'>
+						<ul>
+							<li>
+								<a href='#'>Поиск Вакансий</a>
+							</li>
+							<li>
+								<a href='#'>Избранное</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+
+			<div className='main'>
+				<div className='filter'>
+					<form action=''>
+						<div className='filter-container'>
+							<div className='Name-Filter'>
+								<p>Фильтры</p>
+								<p>Сбросить все</p>
+							</div>
+
+							<label htmlFor='1'>Отрасль</label>
+							<input id='1' name='Otrsl' type='text' />
+
+							<label>Оклад</label>
+							<input type='text' />
+							<input type='text' />
+
+							<input type='button' value={'Применить'} />
+						</div>
+					</form>
+				</div>
+				<div className='vacancies'></div>
+			</div>
+		</>
+	)
 }
 
 export default App

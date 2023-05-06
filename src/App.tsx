@@ -1,6 +1,15 @@
+import { useEffect } from 'react'
 import SavedVacancies from './Layouts/SavedVacancies'
+import { initializeAppTC } from './Reducer/initialazedReducer'
 import logo from './assets/logo.svg'
+import { useAppDispatch } from './store/store'
+
 function App() {
+	const dispatch = useAppDispatch()
+	useEffect(() => {
+		dispatch(initializeAppTC())
+	}, [])
+
 	return (
 		<>
 			<div className='header'>

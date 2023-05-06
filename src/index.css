@@ -17,9 +17,14 @@
 
 body {
 	font-size: 20px;
-	background-color: var(--Blue-100);
+	background-color: #f5f5f5;
 	line-height: 1.5;
-	font-family: 'Poppins', sans-serif;
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 20px;
+	color: #232134;
 }
 
 * {
@@ -39,7 +44,7 @@ ul {
 	list-style: none;
 }
 .main-container {
-	width: 1200px;
+	width: 1116px;
 	margin: 0 auto;
 }
 .header {
@@ -48,7 +53,7 @@ ul {
 }
 .container {
 	margin: auto;
-	width: 1200px;
+	max-width: 1116px;
 	display: flex;
 	align-items: center;
 	padding-top: 15px;
@@ -75,14 +80,237 @@ a:-webkit-any-link {
 /* main */
 
 .main {
+	max-width: 1116px;
+	margin: auto;
+	/* margin: 0 auto; */
 	display: flex;
 	padding-top: 30px;
 }
 .filter {
-	width: 250px;
+	display: block;
+	width: auto;
 	border-radius: 10%;
 	background-color: var(--White);
 }
 .filter-container {
-	display: inline-block;
+	margin: 20px;
+}
+.filter-container input {
+	display: block;
+}
+.filter-container label {
+	font-size: 17px;
+	font-weight: 600;
+}
+.Name-Filter {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
+}
+.Name-Filter p:first-child {
+	font-weight: 600;
+}
+.Name-Filter p:last-child {
+	align-items: center;
+	display: flex;
+	font-size: 15px;
+	color: var(--Drey-500);
+	margin-left: 10px;
+}
+.Main-margin {
+	margin-top: 16px;
+	background-color: var(--White);
+	border: 1px solid var(--Drey-200);
+	border-radius: 12px;
+}
+/* main info */
+.vacancies {
+	width: 100%;
+	padding-left: 28px;
+}
+.SearchButton {
+	border: 1px solid;
+	/* padding-right: 12px; */
+}
+/* search info */
+.ResultSearch {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+	margin-top: 16px;
+}
+.MainPaginator {
+	margin: 0 auto;
+}
+.Info-Vacancy {
+	width: 100%;
+	padding: 25px 25px 25px 24px;
+}
+.Name-and-Stars {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.Name-and-Stars p {
+	color: var(--Blue-500-main);
+	font-weight: 600;
+	font-size: 20px;
+	line-height: 24px;
+}
+.Salary-and-TypeWork {
+	margin-top: 12.5px;
+	display: flex;
+}
+.In-Salary {
+	color: var(--Black);
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+}
+.In-Dart {
+	padding-left: 12px;
+	padding-right: 12px;
+}
+.In-Type {
+	color: var(--Black);
+	font-weight: 400;
+	font-size: 16px;
+}
+.location {
+	margin-top: 13px;
+	display: flex;
+}
+.location p {
+	color: var(--Black);
+	padding-left: 11.33px;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 19px;
+}
+.paginator {
+	padding-top: 40px;
+}
+
+/*main info */
+.Main-Info-Vacancy {
+	max-width: 773px;
+	margin: 0 auto;
+	background: var(--White);
+	border: 1px solid var(--Drey-200);
+	border-radius: 12px;
+	margin-top: 40px;
+}
+.Main-Info-Container {
+	width: 100%;
+	padding: 24px 25px 24px 24px;
+}
+.Main-Info-Name-and-Stars {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.Main-Info-Name-and-Stars p {
+	color: var(--Black);
+	font-weight: 700;
+	font-size: 28px;
+	line-height: 34px;
+}
+.Main-Info-Salary-and-TypeWork {
+	margin-top: 16.5px;
+	display: flex;
+}
+.Main-Info-In-Salary {
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 20px;
+	color: var(--Black);
+}
+.Main-Info-In-Dart {
+	padding-left: 12px;
+	padding-right: 12px;
+}
+.Main-Info-In-Type {
+	font-weight: 400;
+	font-size: 20px;
+	line-height: 20px;
+	color: var(--Black);
+}
+.Main-Info-location {
+	display: flex;
+	margin-top: 16.5px;
+}
+.Main-Info-location p {
+	padding-left: 11.33px;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 140%;
+	color: var(--Black);
+}
+.current-Info-Vacancy {
+	max-width: 772px;
+	margin: 0 auto;
+	border: 1px solid var(--Drey-200);
+	border-radius: 12px;
+	background: var(--White);
+	margin-top: 20px;
+}
+.current-Info-container {
+	padding: 24px;
+}
+.Name-Current-Info {
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 20px;
+	color: var(--Black);
+}
+.BlockCurrentInfo {
+	margin-top: 20px;
+}
+.BlockCurrentInfo ul {
+	margin-top: 16px;
+	padding-left: 24px;
+	list-style: disc;
+}
+
+/* saved vacances  */
+.SavedVacancies {
+	max-width: 773px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.radius {
+	background-color: var(--White);
+	border: 1px solid var(--Drey-200);
+	border-radius: 12px;
+}
+
+/* NotFound */
+.NotFound {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin: 0 auto;
+	margin-top: 120px;
+}
+.NotFound p {
+	color: #343a40;
+	font-weight: 700;
+	font-size: 24px;
+	line-height: 29px;
+	margin-top: 32px;
+}
+.NotFound input {
+	width: 164px;
+	height: 42px;
+	margin-top: 32px;
+	background: var(--Blue-100);
+	border: none;
+	border-radius: 8px;
 }

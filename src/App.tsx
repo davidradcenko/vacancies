@@ -1,3 +1,4 @@
+import SavedVacancies from './Layouts/SavedVacancies'
 import logo from './assets/logo.svg'
 function App() {
 	return (
@@ -21,28 +22,14 @@ function App() {
 				</div>
 			</div>
 
-			<div className='main'>
-				<div className='filter'>
-					<form action=''>
-						<div className='filter-container'>
-							<div className='Name-Filter'>
-								<p>Фильтры</p>
-								<p>Сбросить все</p>
-							</div>
+			{/* main page */}
+			{/* <MainPage /> */}
 
-							<label htmlFor='1'>Отрасль</label>
-							<input id='1' name='Otrsl' type='text' />
+			{/* Current info pdg*/}
+			{/* <CurrentInfoVacancy /> */}
 
-							<label>Оклад</label>
-							<input type='text' />
-							<input type='text' />
-
-							<input type='button' value={'Применить'} />
-						</div>
-					</form>
-				</div>
-				<div className='vacancies'></div>
-			</div>
+			{/* saved vacanses info pdg*/}
+			<SavedVacancies />
 		</>
 	)
 }

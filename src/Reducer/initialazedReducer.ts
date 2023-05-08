@@ -1,13 +1,19 @@
+import axios from 'axios'
 import { Dispatch } from 'redux'
 import { LoginApi } from '../api/VacanciesAPI'
 
 const Initial: InitialazedType = {
-	initialazUser: false,
 	error: null,
 	status: 'idle',
-	mainUserId: 16939,
-	name: '',
-	foto: '' || null,
+	datasReqAuth: {
+		access_token: null,
+		expires_in: null,
+		refresh_token: null,
+		reg_user_resumes_count: null,
+		token_type: null,
+		ttl: null,
+	},
+	branchs: [],
 }
 
 export const initialazedReducer = (
@@ -15,13 +21,17 @@ export const initialazedReducer = (
 	action: actionTypes
 ): InitialazedType => {
 	switch (action.type) {
-		case 'INITIALAZED-USER':
-			return { ...state, initialazUser: action.value }
 		case 'STATUS-USER': {
 			return { ...state, status: action.value }
 		}
 		case 'ERROR-USER': {
 			return { ...state, error: action.value }
+		}
+		case 'FROM-AUTH-REQUEST': {
+			return { ...state, datasReqAuth: { ...action.value } }
+		}
+		case 'SET-BRANCH': {
+			return { ...state, branchs: action.value }
 		}
 		default:
 			return state
@@ -34,23 +44,86 @@ export const initializeAppTC = () => {
 		dispatch(statusUserAC('loading'))
 		LoginApi.authMe()
 			.then(res => {
-				debugger
-				if (res.data.resultCode === 0) {
-					dispatch(statusUserAC('succeeded'))
-					console.log('YES')
-				} else {
-					dispatch(errorUserAC(res.data))
-					dispatch(statusUserAC('succeeded'))
+				const datas: ResultAuthInterfase = res.data
+				dispatch(authRequestAC(datas))
+
+				const reqest = axios.create({
+					baseURL: `https://startup-summer-2023-proxy.onrender.com/2.0/vacancies/`,
+					headers: {
+						'Authorization': `Bearer ${datas.access_token}`,
+						'x-secret-key': 'GEU4nvd3rej*jeh.eqp',
+						'X-Api-App-Id':'v3.r.137440105.ffdbab114f92b821eac4e21f485343924a773131.06c3bdbb8446aeb91c35b80c42ff69eb9c457948'
+					},
+				})
+				const getPublishVacancies = () => {
+					return reqest.get(``)
 				}
+				debugger
+				getPublishVacancies()
+					.then(res => {
+						dispatch(errorUserAC(null))
+						dispatch(statusUserAC('succeeded'))
+					})
+					.catch(error => {
+						dispatch(errorUserAC(error.response.data.notification_type))
+						dispatch(statusUserAC('succeeded'))
+					})
+
+				dispatch(errorUserAC(null))
+				dispatch(statusUserAC('succeeded'))
 			})
 			.catch(error => {
-				dispatch(errorUserAC(error))
+				dispatch(errorUserAC(error.response.data.notification_type))
+				dispatch(statusUserAC('succeeded'))
 			})
 	}
 }
+
+// export const getPublishVacanciesTC = () => {
+// 	return (dispatch: Dispatch<actionTypes>) => {
+// 		dispatch(statusUserAC('loading'))
+// 		LoginApi.getPublishVacancies()
+// 			.then(res => {
+// 				const datas: ResultAuthInterfase = res.data
+// 				debugger
+
+// 				dispatch(errorUserAC(null))
+// 				dispatch(statusUserAC('succeeded'))
+// 			})
+// 			.catch(error => {
+// 				dispatch(errorUserAC(error.response.data.notification_type))
+// 				dispatch(statusUserAC('succeeded'))
+// 			})
+// 	}
+// }
+
+export const getBranchsTC = () => {
+	return (dispatch: Dispatch<actionTypes>) => {
+		dispatch(statusUserAC('loading'))
+		LoginApi.getBranchs()
+			.then(res => {
+				const resData: Array<BranchsType> = res.data.map((item: any) => ({
+					value: String(item.key),
+					label: item.title_rus,
+				}))
+				dispatch(setBranchsAC(resData))
+				dispatch(errorUserAC(null))
+				dispatch(statusUserAC('succeeded'))
+			})
+			.catch(error => {
+				dispatch(errorUserAC(error.response.data.notification_type))
+				dispatch(statusUserAC('succeeded'))
+			})
+	}
+}
+
 // actions
-export const initializedUserAC = (value: boolean) =>
-	({ type: 'INITIALAZED-USER', value } as const)
+
+export const authRequestAC = (value: ResultAuthType) =>
+	({ type: 'FROM-AUTH-REQUEST', value } as const)
+
+export const setBranchsAC = (value: Array<BranchsType>) =>
+	({ type: 'SET-BRANCH', value } as const)
 
 export const errorUserAC = (value: string | null) =>
 	({ type: 'ERROR-USER', value } as const)
@@ -60,15 +133,41 @@ export const statusUserAC = (value: statusType) =>
 
 // types
 export type InitialazedType = {
-	initialazUser: boolean
 	error: string | null
 	status: statusType
-	mainUserId: number
-	name: string
-	foto: string | null
+	branchs: Array<BranchsType>
+	datasReqAuth: {
+		access_token: string | null
+		expires_in: number | null
+		refresh_token: string | null
+		reg_user_resumes_count: string | null
+		token_type: string | null
+		ttl: number | null
+	}
+}
+export type BranchsType = {
+	value: string
+	label: string
+}
+interface ResultAuthInterfase {
+	access_token: string | null
+	expires_in: number | null
+	refresh_token: string | null
+	reg_user_resumes_count: string | null
+	token_type: string | null
+	ttl: number | null
+}
+export type ResultAuthType = {
+	access_token: string | null
+	expires_in: number | null
+	refresh_token: string | null
+	reg_user_resumes_count: string | null
+	token_type: string | null
+	ttl: number | null
 }
 export type statusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 type actionTypes =
-	| ReturnType<typeof initializedUserAC>
+	| ReturnType<typeof authRequestAC>
+	| ReturnType<typeof setBranchsAC>
 	| ReturnType<typeof statusUserAC>
 	| ReturnType<typeof errorUserAC>

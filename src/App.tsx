@@ -1,13 +1,21 @@
 import { useEffect } from 'react'
-import SavedVacancies from './Layouts/SavedVacancies'
-import { initializeAppTC } from './Reducer/initialazedReducer'
+import MainPage from './Layouts/MainPage'
+import {
+	getBranchsTC,
+	getPublishVacanciesTC,
+	initializeAppTC,
+} from './Reducer/initialazedReducer'
 import logo from './assets/logo.svg'
 import { useAppDispatch } from './store/store'
 
 function App() {
 	const dispatch = useAppDispatch()
+
 	useEffect(() => {
 		dispatch(initializeAppTC())
+		dispatch(getBranchsTC())
+
+		// dispatch(getPublishVacanciesTC())
 	}, [])
 
 	return (
@@ -32,13 +40,13 @@ function App() {
 			</div>
 
 			{/* main page */}
-			{/* <MainPage /> */}
+			<MainPage />
 
 			{/* Current info pdg*/}
 			{/* <CurrentInfoVacancy /> */}
 
 			{/* saved vacanses info pdg*/}
-			<SavedVacancies />
+			{/* <SavedVacancies /> */}
 		</>
 	)
 }

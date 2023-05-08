@@ -28,6 +28,7 @@ export const initialazedReducer = (
 			return { ...state, error: action.value }
 		}
 		case 'FROM-AUTH-REQUEST': {
+			action.value.access_token !=null?localStorage.setItem('access_token',action.value.access_token) : ""
 			return { ...state, datasReqAuth: { ...action.value } }
 		}
 		case 'SET-BRANCH': {
@@ -46,31 +47,27 @@ export const initializeAppTC = () => {
 			.then(res => {
 				const datas: ResultAuthInterfase = res.data
 				dispatch(authRequestAC(datas))
-
-				const reqest = axios.create({
-					baseURL: `https://startup-summer-2023-proxy.onrender.com/2.0/vacancies/`,
-					headers: {
-						'Authorization': `Bearer ${datas.access_token}`,
-						'x-secret-key': 'GEU4nvd3rej*jeh.eqp',
-						'X-Api-App-Id':'v3.r.137440105.ffdbab114f92b821eac4e21f485343924a773131.06c3bdbb8446aeb91c35b80c42ff69eb9c457948'
-					},
-				})
-				const getPublishVacancies = () => {
-					return reqest.get(``)
-				}
-				debugger
-				getPublishVacancies()
-					.then(res => {
-						dispatch(errorUserAC(null))
-						dispatch(statusUserAC('succeeded'))
-					})
-					.catch(error => {
-						dispatch(errorUserAC(error.response.data.notification_type))
-						dispatch(statusUserAC('succeeded'))
-					})
-
 				dispatch(errorUserAC(null))
 				dispatch(statusUserAC('succeeded'))
+
+
+
+				// dispatch(statusUserAC('loading'))
+				// LoginApi.getPublishVacancies()
+				// 	.then(res => {
+				// 		const datas: ResultAuthInterfase = res.data
+				// 		debugger
+				// 		dispatch(errorUserAC(null))
+				// 		dispatch(statusUserAC('succeeded'))
+				// 	})
+				// 	.catch(error => {
+				// 		dispatch(errorUserAC(error.response.data.notification_type))
+				// 		dispatch(statusUserAC('succeeded'))
+				// 	})
+
+
+
+
 			})
 			.catch(error => {
 				dispatch(errorUserAC(error.response.data.notification_type))
@@ -86,7 +83,6 @@ export const initializeAppTC = () => {
 // 			.then(res => {
 // 				const datas: ResultAuthInterfase = res.data
 // 				debugger
-
 // 				dispatch(errorUserAC(null))
 // 				dispatch(statusUserAC('succeeded'))
 // 			})
@@ -97,11 +93,14 @@ export const initializeAppTC = () => {
 // 	}
 // }
 
+
+
 export const getBranchsTC = () => {
 	return (dispatch: Dispatch<actionTypes>) => {
 		dispatch(statusUserAC('loading'))
 		LoginApi.getBranchs()
 			.then(res => {
+				debugger
 				const resData: Array<BranchsType> = res.data.map((item: any) => ({
 					value: String(item.key),
 					label: item.title_rus,
@@ -111,6 +110,7 @@ export const getBranchsTC = () => {
 				dispatch(statusUserAC('succeeded'))
 			})
 			.catch(error => {
+				debugger
 				dispatch(errorUserAC(error.response.data.notification_type))
 				dispatch(statusUserAC('succeeded'))
 			})

@@ -13,6 +13,9 @@ const Initial: InitialazedType = {
 		token_type: null,
 		ttl: null,
 	},
+	currentVacancies:[],
+	curentPageVacancies:1,
+	totalPage:0,
 	branchs: [],
 }
 
@@ -34,6 +37,12 @@ export const initialazedReducer = (
 		case 'SET-BRANCH': {
 			return { ...state, branchs: action.value }
 		}
+		case 'SET-LIST-VACANCIES':{
+			return {...state,currentVacancies:action.value,curentPageVacancies:action.page,totalPage:action.totalPage}
+		}
+		case 'SET-PAGE':{
+			return {...state,curentPageVacancies:action.value}
+		}
 		default:
 			return state
 	}
@@ -49,25 +58,6 @@ export const initializeAppTC = () => {
 				dispatch(authRequestAC(datas))
 				dispatch(errorUserAC(null))
 				dispatch(statusUserAC('succeeded'))
-
-
-
-				// dispatch(statusUserAC('loading'))
-				// LoginApi.getPublishVacancies()
-				// 	.then(res => {
-				// 		const datas: ResultAuthInterfase = res.data
-				// 		debugger
-				// 		dispatch(errorUserAC(null))
-				// 		dispatch(statusUserAC('succeeded'))
-				// 	})
-				// 	.catch(error => {
-				// 		dispatch(errorUserAC(error.response.data.notification_type))
-				// 		dispatch(statusUserAC('succeeded'))
-				// 	})
-
-
-
-
 			})
 			.catch(error => {
 				dispatch(errorUserAC(error.response.data.notification_type))
@@ -76,22 +66,32 @@ export const initializeAppTC = () => {
 	}
 }
 
-// export const getPublishVacanciesTC = () => {
-// 	return (dispatch: Dispatch<actionTypes>) => {
-// 		dispatch(statusUserAC('loading'))
-// 		LoginApi.getPublishVacancies()
-// 			.then(res => {
-// 				const datas: ResultAuthInterfase = res.data
-// 				debugger
-// 				dispatch(errorUserAC(null))
-// 				dispatch(statusUserAC('succeeded'))
-// 			})
-// 			.catch(error => {
-// 				dispatch(errorUserAC(error.response.data.notification_type))
-// 				dispatch(statusUserAC('succeeded'))
-// 			})
-// 	}
-// }
+export const getPublishVacanciesTC = (currentPage:number) => {
+	return (dispatch: Dispatch<actionTypes>) => {
+		dispatch(statusUserAC('loading'))
+		LoginApi.getPublishVacancies(currentPage)
+			.then(res => {
+
+				const resData: Array<VacancyDataType> = res.data.objects.map((item: any) => ({
+					id:item.id,
+					profession:item.profession,
+					payment_from:item.payment_from,
+					currency:item.currency, 
+					type_of_work:item.type_of_work.title,
+					town:item.town.genitive
+				}))
+				const totalPage=res.data.total
+				
+				dispatch(setListVacancies(resData,currentPage,totalPage))
+				dispatch(errorUserAC(null))
+				dispatch(statusUserAC('succeeded'))
+			})
+			.catch(error => {
+				dispatch(errorUserAC(error.response.data.notification_type))
+				dispatch(statusUserAC('succeeded'))
+			})
+	}
+}
 
 
 
@@ -100,7 +100,6 @@ export const getBranchsTC = () => {
 		dispatch(statusUserAC('loading'))
 		LoginApi.getBranchs()
 			.then(res => {
-				debugger
 				const resData: Array<BranchsType> = res.data.map((item: any) => ({
 					value: String(item.key),
 					label: item.title_rus,
@@ -119,17 +118,15 @@ export const getBranchsTC = () => {
 
 // actions
 
-export const authRequestAC = (value: ResultAuthType) =>
-	({ type: 'FROM-AUTH-REQUEST', value } as const)
+export const authRequestAC = (value: ResultAuthType) =>({ type: 'FROM-AUTH-REQUEST', value } as const)
 
-export const setBranchsAC = (value: Array<BranchsType>) =>
-	({ type: 'SET-BRANCH', value } as const)
+export const setListVacancies = (value: Array<VacancyDataType>,page:number,totalPage:number) =>({ type: 'SET-LIST-VACANCIES', value,page,totalPage } as const)
 
-export const errorUserAC = (value: string | null) =>
-	({ type: 'ERROR-USER', value } as const)
+export const setBranchsAC = (value: Array<BranchsType>) =>({ type: 'SET-BRANCH', value } as const)
 
-export const statusUserAC = (value: statusType) =>
-	({ type: 'STATUS-USER', value } as const)
+export const errorUserAC = (value: string | null) =>({ type: 'ERROR-USER', value } as const)
+export const setPage = (value: number) =>({ type: 'SET-PAGE', value } as const)
+export const statusUserAC = (value: statusType) =>({ type: 'STATUS-USER', value } as const)
 
 // types
 export type InitialazedType = {
@@ -144,6 +141,17 @@ export type InitialazedType = {
 		token_type: string | null
 		ttl: number | null
 	}
+	currentVacancies:Array<VacancyDataType>
+	curentPageVacancies:number
+	totalPage:number
+}
+export type VacancyDataType={
+	id:number
+	profession:string
+	payment_from:number
+	currency:'rub' | 'uah' | 'uzs' 
+	type_of_work:string
+	town:string
 }
 export type BranchsType = {
 	value: string
@@ -168,6 +176,8 @@ export type ResultAuthType = {
 export type statusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 type actionTypes =
 	| ReturnType<typeof authRequestAC>
+	| ReturnType<typeof setListVacancies>
 	| ReturnType<typeof setBranchsAC>
 	| ReturnType<typeof statusUserAC>
 	| ReturnType<typeof errorUserAC>
+	| ReturnType<typeof setPage>

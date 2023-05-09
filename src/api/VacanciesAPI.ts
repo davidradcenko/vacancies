@@ -16,14 +16,14 @@ const instance = axios.create({
 	withCredentials: true,
 })
 
-// const instanceBeforAuth = axios.create({
-// 	baseURL: `https://startup-summer-2023-proxy.onrender.com/2.0/vacancies/`,
-// 	headers: {
-// 		'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-// 		'x-secret-key': 'GEU4nvd3rej*jeh.eqp',
-// 		'X-Api-App-Id':'v3.r.137440105.ffdbab114f92b821eac4e21f485343924a773131.06c3bdbb8446aeb91c35b80c42ff69eb9c457948'
-// 	},
-// })
+const instanceBeforAuth = axios.create({
+	baseURL: `https://startup-summer-2023-proxy.onrender.com/2.0/vacancies/`,
+	headers: {
+		'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+		'x-secret-key': 'GEU4nvd3rej*jeh.eqp',
+		'X-Api-App-Id':'v3.r.137440105.ffdbab114f92b821eac4e21f485343924a773131.06c3bdbb8446aeb91c35b80c42ff69eb9c457948'
+	},
+})
 
 
 
@@ -36,9 +36,9 @@ export const LoginApi = {
 	getBranchs() {
 		return instance.get('catalogues/')
 	},
-	// getPublishVacancies(){
-	// 	return instanceBeforAuth.get(``)
-	// }
+	getPublishVacancies(page:number){
+		return instanceBeforAuth.get(`?page=${page}&count=4&published=1`)
+	}
 	
 }
 // ?login=${login}&password=${password}&client_id=${client_id}&client_secret=${client_secret}

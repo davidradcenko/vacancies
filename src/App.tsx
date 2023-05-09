@@ -1,18 +1,20 @@
 import { useEffect } from 'react'
 import MainPage from './Layouts/MainPage'
-import {getBranchsTC,initializeAppTC,} from './Reducer/initialazedReducer'
+import {getBranchsTC,getPublishVacanciesTC,initializeAppTC,} from './Reducer/initialazedReducer'
 import logo from './assets/logo.svg'
-import { useAppDispatch } from './store/store'
+import React from "react";
+import { RootState, useAppDispatch } from './store/store'
+import { useSelector } from 'react-redux';
 
-function App(props:any) {
+const  App=React.memo((props:any)=> {
 	const dispatch = useAppDispatch()
+	
 
 	useEffect(() => {
-		// dispatch(initializeAppTC())
-		dispatch(getBranchsTC())
-
-		// dispatch(getPublishVacanciesTC())
+		dispatch(initializeAppTC())
 	},[])
+
+	
 
 	return (
 		<>
@@ -45,6 +47,6 @@ function App(props:any) {
 			{/* <SavedVacancies /> */}
 		</>
 	)
-}
+})
 
 export default App

@@ -1,10 +1,12 @@
 import { Select } from '@mantine/core'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import React from "react";
 import { useSelector } from 'react-redux'
-import { BranchsType } from '../Reducer/initialazedReducer'
-import { RootState } from '../store/store'
+import { BranchsType, getBranchsTC } from '../Reducer/initialazedReducer'
+import { RootState, useAppDispatch } from '../store/store'
 
-export default function InputSelectBranch() {
+ const InputSelectBranch = React.memo(()=> {
+	const dispatch = useAppDispatch()
 	const Branches = useSelector<RootState, Array<BranchsType>>(
 		state => state.initialazed.branchs
 	)
@@ -13,6 +15,10 @@ export default function InputSelectBranch() {
 	const ChangeC = (name: string | null) => {
 		setValue(name)
 	}
+	useEffect(() => {
+		dispatch(getBranchsTC())
+	},[])
+
 	return (
 		<>
 			<div className='OTR'>
@@ -36,3 +42,6 @@ export default function InputSelectBranch() {
 		</>
 	)
 }
+)
+
+export default InputSelectBranch

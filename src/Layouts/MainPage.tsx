@@ -1,10 +1,25 @@
+import React, { useEffect } from 'react'
 import FilterVacancies from '../Layouts/FilterVacancies'
 import InputSearch from '../UI-Components/InputSearch'
-import Paginator from '../UI-Components/Paginator'
-import location from '../assets/Location.png'
-import star from '../assets/Star.png'
 
-export default function MainPage() {
+
+import { RootState, useAppDispatch } from '../store/store'
+import { useSelector } from 'react-redux'
+import { VacancyDataType, getPublishVacanciesTC } from '../Reducer/initialazedReducer'
+import { VacancyTable } from '../UI-Components/VacancyTable'
+import { Paginator } from '../UI-Components/Paginator'
+
+const  MainPage=React.memo(()=> {
+	const dispatch = useAppDispatch()
+	const Branches = useSelector<RootState, string | null>(state => state.initialazed.datasReqAuth.access_token)
+	const page = useSelector<RootState, number>(state => state.initialazed.curentPageVacancies)
+	
+	useEffect(() => {
+		if(Branches){
+			dispatch(getPublishVacanciesTC(page))
+		}
+		
+	},[Branches,page])
 	return (
 		<>
 			<div className='main'>
@@ -13,46 +28,9 @@ export default function MainPage() {
 					<InputSearch />
 
 					<div className='ResultSearch'>
-						<div className='Main-margin'>
-							<div className='Info-Vacancy'>
-								<div className='Name-and-Stars'>
-									<p>Менеджер-дизайнер</p>
-									<img src={star} alt='star' />
-								</div>
 
-								<div className='Salary-and-TypeWork'>
-									<p className='In-Salary'>з/п от 70000 rub</p>
-									<p className='In-Dart'>•</p>
-									<p className='In-Type'>Полный рабочий день</p>
-								</div>
-
-								<div className='location'>
-									<img src={location} alt='location' />
-									<p>Новый Уренгой</p>
-								</div>
-							</div>
-						</div>
-
-						<div className='Main-margin'>
-							<div className='Info-Vacancy'>
-								<div className='Name-and-Stars'>
-									<p>Менеджер-дизайнер</p>
-									<img src={star} alt='star' />
-								</div>
-
-								<div className='Salary-and-TypeWork'>
-									<p className='In-Salary'>з/п от 70000 rub</p>
-									<p className='In-Dart'>•</p>
-									<p className='In-Type'>Полный рабочий день</p>
-								</div>
-
-								<div className='location'>
-									<img src={location} alt='location' />
-									<p>Новый Уренгой</p>
-								</div>
-							</div>
-						</div>
-
+						<VacancyTable/>
+						
 						<div className='MainPaginator'>
 							<Paginator />
 						</div>
@@ -61,4 +39,5 @@ export default function MainPage() {
 			</div>
 		</>
 	)
-}
+})
+export default  MainPage

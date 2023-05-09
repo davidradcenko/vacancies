@@ -265,11 +265,13 @@ a:-webkit-any-link {
 	padding-left: 24px;
 	list-style: disc;
 }
-
 .current-Info-container b {
+	font-weight: 700;
+}
+.current-Info-container p {
 	display: block;
 	margin-top: 20px;
-	font-weight: 700;
+	margin-bottom: 16px;
 	font-size: 20px;
 	line-height: 20px;
 	color: var(--Black);

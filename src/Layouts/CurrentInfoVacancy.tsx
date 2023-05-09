@@ -1,85 +1,47 @@
+import { useParams } from 'react-router-dom'
 import location from '../assets/Location.png'
 import star from '../assets/Star.png'
-export default function CurrentInfoVacancy() {
-	return (
-		<>
-			<div className='Main-Info-Vacancy'>
-				<div className='Main-Info-Container'>
-					<div className='Main-Info-Name-and-Stars'>
-						<p>Менеджер-дизайнер</p>
-						<img src={star} alt='star' />
-					</div>
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store/store'
+import { VacancyDataType } from '../Reducer/initialazedReducer'
 
-					<div className='Main-Info-Salary-and-TypeWork'>
-						<p className='Main-Info-In-Salary'>з/п от 70000 rub</p>
-						<p className='Main-Info-In-Dart'>•</p>
-						<p className='Main-Info-In-Type'>Полный рабочий день</p>
-					</div>
 
-					<div className='Main-Info-location'>
-						<img src={location} alt='location' />
-						<p>Новый Уренгой</p>
-					</div>
-				</div>
+
+export const CurrentInfoVacancy=React.memo(()=> {
+	const params = useParams<'id'>()
+	const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
+
+	const myInfo=ListofVacancies.filter((index)=>index.id==Number(params.id))
+debugger
+	console.log("__________________"+params.id)
+return (
+<>
+	<div className='Main-Info-Vacancy'>
+		<div className='Main-Info-Container'>
+			<div className='Main-Info-Name-and-Stars'>
+				<p>{myInfo[0].profession}</p>
+				<img src={star} alt='star' />
 			</div>
 
-			<div className='current-Info-Vacancy'>
-				<div className='current-Info-container'>
-					<div className='BlockCurrentInfo'>
-						<p className='Name-Current-Info'>Обязанности:</p>
-						<ul>
-							<li>
-								Разработка дизайн-макетов для наружной, интерьерной рекламы,
-								полиграфии, сувенирной продукции.
-							</li>
-							<li>
-								Подготовка и вёрстка макетов в CorelDraw, Adobe photoshop.
-							</li>
-							<li>Создание дизайна логотипов и брендбуков</li>
-							<li>
-								Управленческая функция: обучение, адаптация дизайнеров, их
-								контроль, оценка
-							</li>
-						</ul>
-					</div>
-
-					<div className='BlockCurrentInfo'>
-						<p className='Name-Current-Info'>Требования:</p>
-						<ul>
-							<li>
-								Разработка дизайн-макетов для наружной, интерьерной рекламы,
-								полиграфии, сувенирной продукции.
-							</li>
-							<li>
-								Подготовка и вёрстка макетов в CorelDraw, Adobe photoshop.
-							</li>
-							<li>Создание дизайна логотипов и брендбуков</li>
-							<li>
-								Управленческая функция: обучение, адаптация дизайнеров, их
-								контроль, оценка
-							</li>
-						</ul>
-					</div>
-
-					<div className='BlockCurrentInfo'>
-						<p className='Name-Current-Info'>Условия:</p>
-						<ul>
-							<li>
-								Разработка дизайн-макетов для наружной, интерьерной рекламы,
-								полиграфии, сувенирной продукции.
-							</li>
-							<li>
-								Подготовка и вёрстка макетов в CorelDraw, Adobe photoshop.
-							</li>
-							<li>Создание дизайна логотипов и брендбуков</li>
-							<li>
-								Управленческая функция: обучение, адаптация дизайнеров, их
-								контроль, оценка
-							</li>
-						</ul>
-					</div>
-				</div>
+			<div className='Main-Info-Salary-and-TypeWork'>
+				<p className='Main-Info-In-Salary'>з/п от {myInfo[0].payment_from} {myInfo[0].currency}</p>
+				<p className='Main-Info-In-Dart'>•</p>
+				<p className='Main-Info-In-Type'>{myInfo[0].type_of_work}</p>
 			</div>
-		</>
-	)
-}
+
+			<div className='Main-Info-location'>
+				<img src={location} alt='location' />
+				<p>{myInfo[0].town}</p>
+			</div>
+		</div>
+	</div>
+
+	<div className='current-Info-Vacancy'>
+		<div className='current-Info-container'>
+			{myInfo[0].MoreInfo}
+		</div>
+	</div>
+</>
+)
+})

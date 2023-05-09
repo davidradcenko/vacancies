@@ -5,6 +5,9 @@ import logo from './assets/logo.svg'
 import React from "react";
 import { RootState, useAppDispatch } from './store/store'
 import { useSelector } from 'react-redux';
+import SavedVacancies from './Layouts/SavedVacancies';
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import { CurrentInfoVacancy } from './Layouts/CurrentInfoVacancy';
 
 const  App=React.memo((props:any)=> {
 	const dispatch = useAppDispatch()
@@ -18,6 +21,7 @@ const  App=React.memo((props:any)=> {
 
 	return (
 		<>
+		
 			<div className='header'>
 				<div className='container'>
 					<div className='Logo'>
@@ -36,15 +40,16 @@ const  App=React.memo((props:any)=> {
 					</nav>
 				</div>
 			</div>
+			
+			<Routes>
+				<Route path="/" element={<MainPage />}/>
+				<Route path="/Info/:id" element={<CurrentInfoVacancy />}/>
+				<Route path="/Saved" element={<SavedVacancies />}/>
 
-			{/* main page */}
-			<MainPage />
-
-			{/* Current info pdg*/}
-			{/* <CurrentInfoVacancy /> */}
-
-			{/* saved vacanses info pdg*/}
-			{/* <SavedVacancies /> */}
+				<Route path="/404" element={<h1>404. Page not found</h1>}/>
+                <Route path="*" element={<Navigate to="/404"/>}/>
+			</Routes>
+			
 		</>
 	)
 })

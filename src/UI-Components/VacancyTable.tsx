@@ -4,15 +4,21 @@ import { VacancyDataType } from "../Reducer/initialazedReducer"
 import location from '../assets/Location.png'
 import star from '../assets/Star.png'
 import React from "react"
+import {Link, Navigate, useNavigate} from "react-router-dom";
 
 export const VacancyTable= React.memo(()=>{
     const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
+
+	const navigate = useNavigate();
+	const Redirect=(id:number)=>{
+		navigate(`/Info/${id}`)  
+	}
     return <>
     {ListofVacancies.map((item)=>{
 							return <div key={item.id} className='Main-margin'>
 							<div className='Info-Vacancy'>
 								<div className='Name-and-Stars'>
-									<p>{item.profession}</p>
+									<p onClick={()=>Redirect(item.id)} >{item.profession}</p>
 									<img src={star} alt='star' />
 								</div>
 

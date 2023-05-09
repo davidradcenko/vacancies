@@ -60,7 +60,7 @@ export const initializeAppTC = () => {
 				dispatch(statusUserAC('succeeded'))
 			})
 			.catch(error => {
-				dispatch(errorUserAC(error.response.data.notification_type))
+				dispatch(errorUserAC(error.message))
 				dispatch(statusUserAC('succeeded'))
 			})
 	}
@@ -78,7 +78,8 @@ export const getPublishVacanciesTC = (currentPage:number) => {
 					payment_from:item.payment_from,
 					currency:item.currency, 
 					type_of_work:item.type_of_work.title,
-					town:item.town.genitive
+					town:item.town.genitive,
+					MoreInfo:item.vacancyRichText
 				}))
 				const totalPage=res.data.total
 				
@@ -87,7 +88,7 @@ export const getPublishVacanciesTC = (currentPage:number) => {
 				dispatch(statusUserAC('succeeded'))
 			})
 			.catch(error => {
-				dispatch(errorUserAC(error.response.data.notification_type))
+				dispatch(errorUserAC(error.message))
 				dispatch(statusUserAC('succeeded'))
 			})
 	}
@@ -110,7 +111,8 @@ export const getBranchsTC = () => {
 			})
 			.catch(error => {
 				debugger
-				dispatch(errorUserAC(error.response.data.notification_type))
+				// dispatch(errorUserAC(error.response.data.notification_type))
+				dispatch(errorUserAC(error.message))
 				dispatch(statusUserAC('succeeded'))
 			})
 	}
@@ -151,7 +153,8 @@ export type VacancyDataType={
 	payment_from:number
 	currency:'rub' | 'uah' | 'uzs' 
 	type_of_work:string
-	town:string
+	town:string,
+	MoreInfo:string
 }
 export type BranchsType = {
 	value: string

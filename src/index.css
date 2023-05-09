@@ -261,6 +261,22 @@ a:-webkit-any-link {
 .current-Info-container {
 	padding: 24px;
 }
+.current-Info-container ul {
+	padding-left: 24px;
+	list-style: disc;
+}
+
+.current-Info-container b {
+	display: block;
+	margin-top: 20px;
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 20px;
+	color: var(--Black);
+}
+.current-Info-container b:first-child {
+	margin-top: 0px;
+}
 .Name-Current-Info {
 	font-weight: 700;
 	font-size: 20px;

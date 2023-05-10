@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import location from '../assets/Location.png'
 import star from '../assets/Star.png'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 import { VacancyDataType } from '../Reducer/initialazedReducer'
@@ -9,25 +9,25 @@ import { StarForSaveVacancy } from '../UI-Components/StarsForSaveVacancy'
 
 
 
-export const CurrentInfoVacancy=React.memo(()=> {
+export const CurrentInfoVacancy=()=> {
 	const params = useParams<'id'>()
 	const navigate = useNavigate();
 	const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
-	debugger
 	if (ListofVacancies.length==0) {
         navigate('/Saved')
     }
 	const myInfo=ListofVacancies.filter((index)=>index.id==Number(params.id))
-	debugger
 
-	
+	let mi_array:any=[]
+    const currentData  = localStorage.getItem("Id_Vacancies")
+    mi_array = currentData ? JSON.parse(currentData) : [];
 return (
 <>	
 	<div className='Main-Info-Vacancy'>
 		<div className='Main-Info-Container'>
 			<div className='Main-Info-Name-and-Stars'>
 				<p>{myInfo[0].profession}</p>
-				<StarForSaveVacancy id={myInfo[0].id}/>
+				<StarForSaveVacancy id={myInfo[0].id} active={mi_array.includes(myInfo[0].id)?true:false}/>
 			</div>
 
 			<div className='Main-Info-Salary-and-TypeWork'>
@@ -53,4 +53,4 @@ return (
 	</div>
 </>
 )
-})
+}

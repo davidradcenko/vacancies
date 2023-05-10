@@ -6,7 +6,7 @@ import React from "react";
 import { RootState, useAppDispatch } from './store/store'
 import { useSelector } from 'react-redux';
 import SavedVacancies from './Layouts/SavedVacancies';
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Link, Navigate, Route, Routes} from "react-router-dom";
 import { CurrentInfoVacancy } from './Layouts/CurrentInfoVacancy';
 
 const  App=React.memo((props:any)=> {
@@ -34,7 +34,7 @@ const  App=React.memo((props:any)=> {
 								<a href='#'>Поиск Вакансий</a>
 							</li>
 							<li>
-								<a href='#'>Избранное</a>
+								<Link to={'Saved'}>Избранное</Link>
 							</li>
 						</ul>
 					</nav>

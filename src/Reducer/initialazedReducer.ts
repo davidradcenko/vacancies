@@ -14,6 +14,7 @@ const Initial: InitialazedType = {
 		ttl: null,
 	},
 	currentVacancies:[],
+	savedVacancies:[],
 	curentPageVacancies:1,
 	totalPage:0,
 	branchs: [],
@@ -42,6 +43,9 @@ export const initialazedReducer = (
 		}
 		case 'SET-PAGE':{
 			return {...state,curentPageVacancies:action.value}
+		}
+		case 'SET-LIST-VACANCIES-V2':{
+			return {...state,savedVacancies:[...state.savedVacancies,...action.value],curentPageVacancies:action.page,totalPage:action.totalPage}
 		}
 		default:
 			return state
@@ -96,6 +100,34 @@ export const getPublishVacanciesTC = (currentPage:number) => {
 
 
 
+export const getCurrentsVacanciesTC = (currentPage:number,arrayVacancy:number) => {
+	return (dispatch: Dispatch<actionTypes>) => {
+		dispatch(statusUserAC('loading'))
+		LoginApi.getCurrentsVacancies(currentPage,arrayVacancy)
+			.then(res => {
+				const resData: Array<VacancyDataType> = [{
+					id:res.data.id,
+					profession:res.data.profession,
+					payment_from:res.data.payment_from,
+					currency:res.data.currency, 
+					type_of_work:res.data.type_of_work.title,
+					town:res.data.town.genitive,
+					MoreInfo:res.data.vacancyRichText
+				}]
+				const totalPage=10000
+				
+				dispatch(setListVacanciesV2(resData,currentPage,totalPage))
+				dispatch(errorUserAC(null))
+				dispatch(statusUserAC('succeeded'))
+			})
+			.catch(error => {
+				dispatch(errorUserAC(error.message))
+				dispatch(statusUserAC('succeeded'))
+			})
+	}
+}
+
+
 export const getBranchsTC = () => {
 	return (dispatch: Dispatch<actionTypes>) => {
 		dispatch(statusUserAC('loading'))
@@ -123,6 +155,7 @@ export const getBranchsTC = () => {
 export const authRequestAC = (value: ResultAuthType) =>({ type: 'FROM-AUTH-REQUEST', value } as const)
 
 export const setListVacancies = (value: Array<VacancyDataType>,page:number,totalPage:number) =>({ type: 'SET-LIST-VACANCIES', value,page,totalPage } as const)
+export const setListVacanciesV2 = (value: Array<VacancyDataType>,page:number,totalPage:number) =>({ type: 'SET-LIST-VACANCIES-V2', value,page,totalPage } as const)
 
 export const setBranchsAC = (value: Array<BranchsType>) =>({ type: 'SET-BRANCH', value } as const)
 
@@ -144,6 +177,7 @@ export type InitialazedType = {
 		ttl: number | null
 	}
 	currentVacancies:Array<VacancyDataType>
+	savedVacancies:Array<VacancyDataType>
 	curentPageVacancies:number
 	totalPage:number
 }
@@ -184,3 +218,4 @@ type actionTypes =
 	| ReturnType<typeof statusUserAC>
 	| ReturnType<typeof errorUserAC>
 	| ReturnType<typeof setPage>
+	| ReturnType<typeof setListVacanciesV2>

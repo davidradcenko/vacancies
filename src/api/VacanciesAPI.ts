@@ -17,7 +17,7 @@ const instance = axios.create({
 })
 
 const instanceBeforAuth = axios.create({
-	baseURL: `https://startup-summer-2023-proxy.onrender.com/2.0/vacancies/`,
+	baseURL: `https://startup-summer-2023-proxy.onrender.com/2.0/`,
 	headers: {
 		'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 		'x-secret-key': 'GEU4nvd3rej*jeh.eqp',
@@ -37,7 +37,10 @@ export const LoginApi = {
 		return instance.get('catalogues/')
 	},
 	getPublishVacancies(page:number){
-		return instanceBeforAuth.get(`?page=${page}&count=4&published=1`)
+		return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1`)
+	},
+	getCurrentsVacancies(page:number,id:number){
+		return instanceBeforAuth.get(`vacancies/${id}`)
 	}
 	
 }

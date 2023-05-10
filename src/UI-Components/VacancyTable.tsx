@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { RootState, useAppDispatch } from "../store/store"
-import { VacancyDataType } from "../Reducer/initialazedReducer"
+import { VacancyDataType, getCurrentsVacanciesTC, getPublishVacanciesTC } from "../Reducer/initialazedReducer"
 import location from '../assets/Location.png'
 import React, { useEffect } from "react"
 import {Link, Navigate, useNavigate} from "react-router-dom";
@@ -51,7 +51,7 @@ export const VacancyTable= React.memo(()=>{
 
 export const SavedTableVacancies= React.memo(()=>{
 	
-    const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
+    const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.savedVacancies)
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
@@ -63,12 +63,14 @@ export const SavedTableVacancies= React.memo(()=>{
     mi_array = currentData ? JSON.parse(currentData) : [];
 
 	useEffect(()=>{
-		
-
+		debugger
+		for(let i=0;i<=mi_array.length-1;i++){
+			dispatch(getCurrentsVacanciesTC(1,mi_array[i]))
+		}
 	},[])
     return <>
     {ListofVacancies.map((item)=>{
-							return <div key={item.id} className='Main-margin'>
+						return <div key={item.id} className='Main-margin'>
 							<div className='Info-Vacancy'>
 								<div className='Name-and-Stars'>
 									<p onClick={()=>Redirect(item.id)} >{item.profession}</p>

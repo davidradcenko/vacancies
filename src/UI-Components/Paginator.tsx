@@ -2,7 +2,7 @@ import { Pagination } from '@mantine/core'
 import React, { useState } from 'react'
 import { RootState, useAppDispatch } from '../store/store'
 import { useSelector } from 'react-redux'
-import { setCurrentPageSavedVacancies, setPage } from '../Reducer/initialazedReducer'
+import { deleteStateSavedVacanciesAC, setCurrentPageSavedVacancies, setPage } from '../Reducer/initialazedReducer'
 
 export const Paginator=React.memo(()=> {
 	const dispatch = useAppDispatch()
@@ -37,8 +37,10 @@ export const PaginatorForSaveVacancies=React.memo(()=> {
 	const [activePage, setActivePage] = useState<number>(currentPage)
 	
 	const changeActivePage=(page:number)=>{
+		debugger
+		dispatch(deleteStateSavedVacanciesAC())
 		setActivePage(page)
-		dispatch(setCurrentPageSavedVacancies(activePage))
+		dispatch(setCurrentPageSavedVacancies(page))
 		
 	}
 

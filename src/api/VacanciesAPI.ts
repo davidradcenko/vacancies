@@ -39,8 +39,8 @@ export const LoginApi = {
 	getPublishVacancies(page:number){
 		return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1`)
 	},
-	getCurrentsVacancies(page:number,id:number){
-		return instanceBeforAuth.get(`vacancies/${id}`)
+	getCurrentsVacancies(id:number){
+		return instanceBeforAuth.get(`vacancies/${id}/`)
 	}
 	
 }

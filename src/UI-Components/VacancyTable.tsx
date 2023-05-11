@@ -54,7 +54,7 @@ export const SavedTableVacancies= React.memo(()=>{
 	
     const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.savedVacancies.vacancies)
     const currentPade = useSelector<RootState, number>(state => state.initialazed.savedVacancies.currentPage)
-	debugger
+
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
@@ -71,12 +71,22 @@ export const SavedTableVacancies= React.memo(()=>{
 	// 		dispatch(getCurrentsVacanciesTC(1,mi_array[i]))
 	// 	}
 	// },[])
-
-
+debugger
+debugger
 	useEffect(()=>{
-		dispatch(deleteStateSavedVacanciesAC())
-		for(let i=currentPade*4;i<=mi_array.length;i++){
-			dispatch(getCurrentsVacanciesTC(1,mi_array[i]))
+		debugger
+		// dispatch(deleteStateSavedVacanciesAC())
+		let iteral=0
+		let start=(currentPade*4)-4
+		if(currentPade==1){
+			start=0
+		}
+		for(let i=start;i<=mi_array.length-1;i++){
+			if(iteral==4){
+				break
+			}
+			iteral=iteral+1
+			dispatch(getCurrentsVacanciesTC(currentPade,mi_array[i]))
 		}
 	},[currentPade])
     return <>

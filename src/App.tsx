@@ -31,7 +31,7 @@ const  App=React.memo((props:any)=> {
 					<nav className='menu'>
 						<ul>
 							<li>
-								<a href='#'>Поиск Вакансий</a>
+								<Link to={'/'}>Поиск Вакансий</Link>
 							</li>
 							<li>
 								<Link to={'Saved'}>Избранное</Link>

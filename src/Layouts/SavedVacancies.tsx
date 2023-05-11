@@ -1,3 +1,4 @@
+import { Paginator, PaginatorForSaveVacancies } from '../UI-Components/Paginator'
 import { SavedTableVacancies } from '../UI-Components/VacancyTable'
 import location from '../assets/Location.png'
 import starSelect from '../assets/StarSelect.png'
@@ -17,7 +18,7 @@ export default function SavedVacancies() {
 		?<NoSavedVacancies />
 		:<div className='SavedVacancies'>
 			<SavedTableVacancies/>
-			{/* <Paginator /> */}
+			<PaginatorForSaveVacancies/>
 		</div> 
 		}	
 		</>

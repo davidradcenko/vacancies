@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Dispatch } from 'redux'
 import { LoginApi } from '../api/VacanciesAPI'
+import SavedVacancies from '../Layouts/SavedVacancies'
 
 const Initial: InitialazedType = {
 	error: null,
@@ -14,7 +15,10 @@ const Initial: InitialazedType = {
 		ttl: null,
 	},
 	currentVacancies:[],
-	savedVacancies:[],
+	savedVacancies:{
+		vacancies:[],
+		currentPage:1
+	},
 	curentPageVacancies:1,
 	totalPage:0,
 	branchs: [],
@@ -45,7 +49,16 @@ export const initialazedReducer = (
 			return {...state,curentPageVacancies:action.value}
 		}
 		case 'SET-LIST-VACANCIES-V2':{
-			return {...state,savedVacancies:[...state.savedVacancies,...action.value],curentPageVacancies:action.page,totalPage:action.totalPage}
+			return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:[...state.savedVacancies.vacancies,...action.value]},curentPageVacancies:action.page,totalPage:action.totalPage}
+		}
+		case 'DELETE-SAVED-VACANCIES':{
+			return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:[]}}
+		}
+		case 'SET-CURRENT-PAGE-SAVED-VACANCIES':{
+			return {...state,savedVacancies:{
+				currentPage:action.currentPage,
+				vacancies:state.savedVacancies.vacancies
+			}}
 		}
 		default:
 			return state
@@ -162,6 +175,8 @@ export const setBranchsAC = (value: Array<BranchsType>) =>({ type: 'SET-BRANCH',
 export const errorUserAC = (value: string | null) =>({ type: 'ERROR-USER', value } as const)
 export const setPage = (value: number) =>({ type: 'SET-PAGE', value } as const)
 export const statusUserAC = (value: statusType) =>({ type: 'STATUS-USER', value } as const)
+export const deleteStateSavedVacanciesAC = () =>({ type: 'DELETE-SAVED-VACANCIES' } as const)
+export const setCurrentPageSavedVacancies = (currentPage:number) =>({ type: 'SET-CURRENT-PAGE-SAVED-VACANCIES',currentPage } as const)
 
 // types
 export type InitialazedType = {
@@ -177,7 +192,10 @@ export type InitialazedType = {
 		ttl: number | null
 	}
 	currentVacancies:Array<VacancyDataType>
-	savedVacancies:Array<VacancyDataType>
+	savedVacancies:{
+		vacancies:Array<VacancyDataType>
+		currentPage:number
+	}
 	curentPageVacancies:number
 	totalPage:number
 }
@@ -219,3 +237,5 @@ type actionTypes =
 	| ReturnType<typeof errorUserAC>
 	| ReturnType<typeof setPage>
 	| ReturnType<typeof setListVacanciesV2>
+	| ReturnType<typeof deleteStateSavedVacanciesAC>
+	| ReturnType<typeof setCurrentPageSavedVacancies>

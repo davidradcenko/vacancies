@@ -11,8 +11,16 @@ import { StarForSaveVacancy } from '../UI-Components/StarsForSaveVacancy'
 
 export const CurrentInfoVacancy=()=> {
 	const params = useParams<'id'>()
+	const from:any = useParams<'from'>()
+	debugger
 	const navigate = useNavigate();
-	const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
+	let ListofVacancies
+	const formMain = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
+	const formSave = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.savedVacancies.vacancies)
+	if (from=="main"){
+		ListofVacancies=formMain
+	}else ListofVacancies=formSave 
+	
 	if (ListofVacancies.length==0) {
         navigate('/Saved')
     }
@@ -21,6 +29,7 @@ export const CurrentInfoVacancy=()=> {
 	let mi_array:any=[]
     const currentData  = localStorage.getItem("Id_Vacancies")
     mi_array = currentData ? JSON.parse(currentData) : [];
+	debugger
 return (
 <>	
 	<div className='Main-Info-Vacancy'>

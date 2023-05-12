@@ -16,7 +16,7 @@ import { RootState, useAppDispatch } from '../store/store'
 		setValue(name)
 	}
 	useEffect(() => {
-		dispatch(getBranchsTC())
+		// dispatch(getBranchsTC())
 	},[])
 
 	return (

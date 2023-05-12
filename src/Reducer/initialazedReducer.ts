@@ -49,22 +49,10 @@ export const initialazedReducer = (
 			return {...state,curentPageVacancies:action.value}
 		}
 		case 'SET-LIST-VACANCIES-V2':{
-			const nowArray:Array<VacancyDataType>=state.savedVacancies.vacancies
-			nowArray.push(action.value[0])
-
-			let mi_array:any=[]
-    const currentData  = localStorage.getItem("Id_Vacancies")
-    mi_array = currentData ? JSON.parse(currentData) : []
-			type m={
-				id:number
-			}
-			const localST:Array<m>=mi_array.map((l:number)=>({id:l}))
-
-			const orderObj = localST.reduce( (a:any,c:any,i:any) => { a[c.id] = i; return a; } , {});
-			nowArray.sort( (l:any,r:any) =>  orderObj[l.id] - orderObj[r.id] );
+	
 			
-			return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:nowArray},curentPageVacancies:action.page,totalPage:action.totalPage}
-			// return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:[...state.savedVacancies.vacancies,...action.value]},curentPageVacancies:action.page,totalPage:action.totalPage}
+	// 		return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:nowArray},curentPageVacancies:action.page,totalPage:action.totalPage}
+			return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:[...state.savedVacancies.vacancies,...action.value]},curentPageVacancies:action.page,totalPage:action.totalPage}
 		}
 		case 'DELETE-SAVED-VACANCIES':{
 			return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:[]}}

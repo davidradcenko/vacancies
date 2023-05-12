@@ -2,7 +2,7 @@ import { useSelector } from "react-redux"
 import { RootState, useAppDispatch } from "../store/store"
 import { VacancyDataType, deleteStateSavedVacanciesAC, getCurrentsVacanciesTC, getPublishVacanciesTC } from "../Reducer/initialazedReducer"
 import location from '../assets/Location.png'
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import { StarForSaveVacancy } from "./StarsForSaveVacancy"
 import { nanoid } from 'nanoid'
@@ -12,7 +12,7 @@ export const VacancyTable= React.memo(()=>{
 
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
-		navigate(`/Info/${id}`)  
+		navigate(`/Info/${id}/main`)  
 	}
 
 
@@ -58,23 +58,24 @@ export const SavedTableVacancies= React.memo(()=>{
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
-		navigate(`/Info/${id}`)  
+		navigate(`/Info/${id}/info`)  
 	}
 
 	let mi_array:any=[]
     const currentData  = localStorage.getItem("Id_Vacancies")
     mi_array = currentData ? JSON.parse(currentData) : [];
-
+	// dispatch(deleteStateSavedVacanciesAC())
 	// useEffect(()=>{
 	// 	dispatch(deleteStateSavedVacanciesAC())
 	// 	for(let i=0;i<=mi_array.length-1;i++){
 	// 		dispatch(getCurrentsVacanciesTC(1,mi_array[i]))
 	// 	}
 	// },[])
-debugger
-debugger
 	useEffect(()=>{
-		debugger
+		dispatch(deleteStateSavedVacanciesAC())
+	},[])
+	useEffect(()=>{
+		
 		// dispatch(deleteStateSavedVacanciesAC())
 		let iteral=0
 		let start=(currentPade*4)-4
@@ -89,8 +90,30 @@ debugger
 			dispatch(getCurrentsVacanciesTC(currentPade,mi_array[i]))
 		}
 	},[currentPade])
+
+	const [nowArray,setnowArray]=useState<Array<VacancyDataType>>([])
+	// const nowArray:Array<VacancyDataType>=[]
+	useEffect(()=>{
+		const nowArray=ListofVacancies
+			
+
+			let mi_array:any=[]
+    const currentData  = localStorage.getItem("Id_Vacancies")
+    mi_array = currentData ? JSON.parse(currentData) : []
+			type m={
+				id:number
+			}
+			const localST:Array<m>=mi_array.map((l:number)=>({id:l}))
+
+			const orderObj = localST.reduce( (a:any,c:any,i:any) => { a[c.id] = i; return a; } , {});
+			const mv=nowArray
+			mv.sort( (l:any,r:any) =>  orderObj[l.id] - orderObj[r.id] );
+			setnowArray(mv)
+debugger
+	},[ListofVacancies])
     return <>
-    {ListofVacancies.map((item)=>{
+    {nowArray.map((item)=>{
+		debugger
 						return <div key={nanoid()} className='Main-margin'>
 							<div className='Info-Vacancy'>
 								<div className='Name-and-Stars'>

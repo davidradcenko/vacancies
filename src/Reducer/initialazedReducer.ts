@@ -17,7 +17,8 @@ const Initial: InitialazedType = {
 	currentVacancies:[],
 	savedVacancies:{
 		vacancies:[],
-		currentPage:1
+		currentPage:1,
+		arrayId:[]
 	},
 	curentPageVacancies:1,
 	totalPage:0,
@@ -52,15 +53,23 @@ export const initialazedReducer = (
 	
 			
 	// 		return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:nowArray},curentPageVacancies:action.page,totalPage:action.totalPage}
-			return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:[...state.savedVacancies.vacancies,...action.value]},curentPageVacancies:action.page,totalPage:action.totalPage}
+			return {...state,savedVacancies:{
+				arrayId:state.savedVacancies.arrayId,
+				currentPage:state.savedVacancies.currentPage,vacancies:[...state.savedVacancies.vacancies,...action.value]},
+				curentPageVacancies:action.page,totalPage:action.totalPage}
 		}
 		case 'DELETE-SAVED-VACANCIES':{
-			return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:[]}}
+			return {...state,savedVacancies:{
+				currentPage:state.savedVacancies.currentPage,
+				vacancies:[],
+				arrayId:state.savedVacancies.arrayId,
+			}}
 		}
 		case 'SET-CURRENT-PAGE-SAVED-VACANCIES':{
 			return {...state,savedVacancies:{
 				currentPage:action.currentPage,
-				vacancies:state.savedVacancies.vacancies
+				vacancies:state.savedVacancies.vacancies,
+				arrayId:state.savedVacancies.arrayId,
 			}}
 		}
 		default:
@@ -197,7 +206,8 @@ export type InitialazedType = {
 	currentVacancies:Array<VacancyDataType>
 	savedVacancies:{
 		vacancies:Array<VacancyDataType>
-		currentPage:number
+		currentPage:number,
+		arrayId:Array<string>
 	}
 	curentPageVacancies:number
 	totalPage:number

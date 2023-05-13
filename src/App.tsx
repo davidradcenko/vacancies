@@ -9,6 +9,7 @@ import SavedVacancies from './Layouts/SavedVacancies';
 import {BrowserRouter, Link, Navigate, Route, Routes} from "react-router-dom";
 import { CurrentInfoVacancy } from './Layouts/CurrentInfoVacancy';
 
+
 const  App=React.memo((props:any)=> {
 	const dispatch = useAppDispatch()
 	
@@ -43,7 +44,7 @@ const  App=React.memo((props:any)=> {
 			
 			<Routes>
 				<Route path="/" element={<MainPage />}/>
-				<Route path="/Info/:id?:from" element={<CurrentInfoVacancy />}/>
+				<Route path="/Info/:abject" element={<CurrentInfoVacancy />}/>
 				<Route path="/Saved" element={<SavedVacancies />}/>
 
 				<Route path="/404" element={<h1>404. Page not found</h1>}/>

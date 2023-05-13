@@ -6,13 +6,15 @@ import React, { useEffect, useState } from "react"
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import { StarForSaveVacancy } from "./StarsForSaveVacancy"
 import { nanoid } from 'nanoid'
-
+import { useTransition, animated } from "react-spring";
 export const VacancyTable= React.memo(()=>{
     const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
 
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
-		navigate(`/Info/${id}/main`)  
+		const v=JSON.stringify(ListofVacancies[id])
+		debugger
+		navigate(`/Info/${encodeURIComponent(v)}`)  
 	}
 
 
@@ -20,11 +22,11 @@ export const VacancyTable= React.memo(()=>{
     const currentData  = localStorage.getItem("Id_Vacancies")
     mi_array = currentData ? JSON.parse(currentData) : [];
     return <>
-    {ListofVacancies.map((item)=>{
+    {ListofVacancies.map((item,index)=>{
 							return <div key={item.id} className='Main-margin'>
 							<div className='Info-Vacancy'>
 								<div className='Name-and-Stars'>
-									<p onClick={()=>Redirect(item.id)} >{item.profession}</p>
+									<p onClick={()=>Redirect(index)} >{item.profession}</p>
 									<StarForSaveVacancy id={item.id} active={mi_array.includes(item.id)?true:false}/>
 								</div>
 
@@ -58,25 +60,22 @@ export const SavedTableVacancies= React.memo(()=>{
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
-		navigate(`/Info/${id}/info`)  
+		const v=JSON.stringify(ListofVacancies[id])
+		navigate(`/Info/${encodeURIComponent(v)}`)  
 	}
 
 	let mi_array:any=[]
     const currentData  = localStorage.getItem("Id_Vacancies")
     mi_array = currentData ? JSON.parse(currentData) : [];
-	// dispatch(deleteStateSavedVacanciesAC())
-	// useEffect(()=>{
-	// 	dispatch(deleteStateSavedVacanciesAC())
-	// 	for(let i=0;i<=mi_array.length-1;i++){
-	// 		dispatch(getCurrentsVacanciesTC(1,mi_array[i]))
-	// 	}
-	// },[])
+	
+	const [nowArray,setnowArray]=useState<Array<VacancyDataType>>([])
+
+
+
 	useEffect(()=>{
 		dispatch(deleteStateSavedVacanciesAC())
 	},[])
 	useEffect(()=>{
-		
-		// dispatch(deleteStateSavedVacanciesAC())
 		let iteral=0
 		let start=(currentPade*4)-4
 		if(currentPade==1){
@@ -90,13 +89,8 @@ export const SavedTableVacancies= React.memo(()=>{
 			dispatch(getCurrentsVacanciesTC(currentPade,mi_array[i]))
 		}
 	},[currentPade])
-
-	const [nowArray,setnowArray]=useState<Array<VacancyDataType>>([])
-	// const nowArray:Array<VacancyDataType>=[]
 	useEffect(()=>{
-		const nowArray=ListofVacancies
-			
-
+		    const nowArray=ListofVacancies
 			let mi_array:any=[]
     const currentData  = localStorage.getItem("Id_Vacancies")
     mi_array = currentData ? JSON.parse(currentData) : []
@@ -109,15 +103,15 @@ export const SavedTableVacancies= React.memo(()=>{
 			const mv=nowArray
 			mv.sort( (l:any,r:any) =>  orderObj[l.id] - orderObj[r.id] );
 			setnowArray(mv)
-debugger
 	},[ListofVacancies])
+
     return <>
-    {nowArray.map((item)=>{
+    {nowArray.map((item,index)=>{
 		debugger
 						return <div key={nanoid()} className='Main-margin'>
 							<div className='Info-Vacancy'>
 								<div className='Name-and-Stars'>
-									<p onClick={()=>Redirect(item.id)} >{item.profession}</p>
+									<p onClick={()=>Redirect(index)} >{item.profession}</p>
 									<StarForSaveVacancy id={item.id} active={mi_array.includes(item.id)?true:false}/>
 								</div>
 
@@ -139,3 +133,9 @@ debugger
 						})}
     </>
 })
+
+
+
+
+
+

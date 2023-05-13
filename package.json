@@ -19,7 +19,8 @@
 		"@tabler/icons-react": "^2.17.0",
 		"nanoid": "^4.0.2",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"react-spring": "^9.7.1"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.28",

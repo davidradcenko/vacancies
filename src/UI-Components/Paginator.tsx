@@ -25,29 +25,27 @@ export const Paginator=React.memo(()=> {
 		</>
 	)
 })
+type PaginatorForSaveVacanciesType={
+	total:number,
+	currentPage:number
+}
 
-export const PaginatorForSaveVacancies=React.memo(()=> {
+
+
+
+
+
+export const PaginatorForSaveVacancies=React.memo((props:PaginatorForSaveVacanciesType)=> {
 	const dispatch = useAppDispatch()
-	const currentPage = useSelector<RootState, number>(state => state.initialazed.savedVacancies.currentPage)
-	let mi_array:any=[]
-    const currentData  = localStorage.getItem("Id_Vacancies")
-    mi_array = currentData ? JSON.parse(currentData) : [];
-
-
-	const [activePage, setActivePage] = useState<number>(currentPage)
-	
 	const changeActivePage=(page:number)=>{
-		debugger
 		dispatch(deleteStateSavedVacanciesAC())
-		setActivePage(page)
 		dispatch(setCurrentPageSavedVacancies(page))
-		
 	}
 
 	return (
 		<>
 			<div className='paginator'>
-				<Pagination value={activePage==0?1:activePage} onChange={(e)=>changeActivePage(e)} total={Math.ceil(mi_array.length/4)} />
+				<Pagination value={props.currentPage} onChange={(e)=>changeActivePage(e)} total={Math.ceil(props.total/4)} />
 			</div>
 		</>
 	)

@@ -1,26 +1,36 @@
 import React from 'react'
 import star from '../assets/Star.png'
 import StarSelect from '../assets/StarSelect.png'
+import { NewArrayOfIDs, deleteStateSavedVacanciesAC, getCurrentsVacanciesTC, setArrayIdAC, setCurrentPageSavedVacancies } from '../Reducer/initialazedReducer'
+import { RootState, useAppDispatch } from '../store/store'
+import { useSelector } from 'react-redux'
 
 
 export const StarForSaveVacancy = React.memo((props:{id:number,active:boolean})=>{
-
+    const dispatch = useAppDispatch()
+    const currentPage = useSelector<RootState, number>(state => state.initialazed.savedVacancies.currentPage)
     const  [activeStar,setActiveStar]=React.useState<boolean>(props.active)
 
-
+    // delete id  
     const SavaOrDeleteVacancy=()=>{
-        let mi_array:any=[]
-        const currentData  = localStorage.getItem("Id_Vacancies")
-        mi_array = currentData ? JSON.parse(currentData) : [];
+        const mi_array:Array<any> = GetIDsFormLocalStoradge()
+
         if(mi_array.includes(props.id)){
+
             mi_array.map((item:number,index:number)=>{
                    if (item === props.id) { 
                     return   mi_array.splice(index, 1); 
                 }
             })
             setActiveStar(false)
+            
+             
+            dispatch(deleteStateSavedVacanciesAC())
+            dispatch(NewArrayOfIDs(mi_array,currentPage))
+           
         }else{
             mi_array.push(props.id)
+            dispatch(setArrayIdAC(mi_array))
             setActiveStar(true)
         }
         const json_transform = JSON.stringify(mi_array);
@@ -36,3 +46,12 @@ export const StarForSaveVacancy = React.memo((props:{id:number,active:boolean})=
         </>
     )
 })
+
+
+
+export const GetIDsFormLocalStoradge=()=>{
+    let mi_array:any=[]
+    const currentData  = localStorage.getItem("Id_Vacancies")
+    mi_array = currentData ? JSON.parse(currentData) : [];
+    return mi_array
+}

@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Dispatch } from 'redux'
 import { LoginApi } from '../api/VacanciesAPI'
 import SavedVacancies from '../Layouts/SavedVacancies'
+import { useAppDispatch } from '../store/store'
 
 const Initial: InitialazedType = {
 	error: null,
@@ -25,10 +26,7 @@ const Initial: InitialazedType = {
 	branchs: [],
 }
 
-export const initialazedReducer = (
-	state: InitialazedType = Initial,
-	action: actionTypes
-): InitialazedType => {
+export const initialazedReducer = (state: InitialazedType = Initial,action: actionTypes): InitialazedType => {
 	switch (action.type) {
 		case 'STATUS-USER': {
 			return { ...state, status: action.value }
@@ -49,14 +47,13 @@ export const initialazedReducer = (
 		case 'SET-PAGE':{
 			return {...state,curentPageVacancies:action.value}
 		}
-		case 'SET-LIST-VACANCIES-V2':{
-	
-			
-	// 		return {...state,savedVacancies:{currentPage:state.savedVacancies.currentPage,vacancies:nowArray},curentPageVacancies:action.page,totalPage:action.totalPage}
-			return {...state,savedVacancies:{
-				arrayId:state.savedVacancies.arrayId,
-				currentPage:state.savedVacancies.currentPage,vacancies:[...state.savedVacancies.vacancies,...action.value]},
-				curentPageVacancies:action.page,totalPage:action.totalPage}
+		case 'SET-LIST-VACANCIES-V2':{		
+				return {...state,savedVacancies:
+					{
+				...state.savedVacancies,
+				vacancies:[...state.savedVacancies.vacancies,...action.value]
+					},
+				}
 		}
 		case 'DELETE-SAVED-VACANCIES':{
 			return {...state,savedVacancies:{
@@ -71,6 +68,30 @@ export const initialazedReducer = (
 				vacancies:state.savedVacancies.vacancies,
 				arrayId:state.savedVacancies.arrayId,
 			}}
+		}
+		case 'SET-ARRAY-ID':{
+			let iteral=0
+			const currentPage = state.savedVacancies.currentPage
+			const mi_array=action.setArrayId
+
+		let start=(currentPage*4)-4
+		if(currentPage==1){
+			start=0
+		}
+		for(let i=start;i<=mi_array.length-1;i++){
+			if(iteral==4){
+				break
+			}
+			iteral=iteral+1
+			getCurrentsVacanciesTC(Number(mi_array[i]))
+		}
+			return{
+				...state,
+				savedVacancies:{
+					...state.savedVacancies,
+					arrayId:action.setArrayId
+				}
+			}
 		}
 		default:
 			return state
@@ -124,8 +145,59 @@ export const getPublishVacanciesTC = (currentPage:number) => {
 }
 
 
+export const NewArrayOfIDs = (IdsArray:Array<string>,currentPage:number) => {
+	return (dispatch: Dispatch<actionTypes>) => {
+		dispatch(statusUserAC('loading'))
 
-export const getCurrentsVacanciesTC = (currentPage:number,arrayVacancy:number) => {
+
+		let iteral=0
+		let start=(currentPage*4)-4
+		if(currentPage==1){
+			start=0
+		}else if(IdsArray.length-1<start){
+			currentPage=currentPage-1
+		}
+
+
+		for(let i=start;i<=IdsArray.length-1;i++){
+			if(iteral==4){break}
+
+		iteral=iteral+1
+		const id=Number(IdsArray[i])
+		LoginApi.getCurrentsVacancies(id).then(res => {
+				const resData: Array<VacancyDataType> = [{
+					id:res.data.id,
+					profession:res.data.profession,
+					payment_from:res.data.payment_from,
+					currency:res.data.currency, 
+					type_of_work:res.data.type_of_work.title,
+					town:res.data.town.genitive,
+					MoreInfo:res.data.vacancyRichText
+				}]
+				const totalPage=10000
+				
+				dispatch(setListVacanciesV2(resData))
+				dispatch(errorUserAC(null))
+				dispatch(statusUserAC('succeeded'))
+			})
+			.catch(error => {
+				dispatch(errorUserAC(error.message))
+				dispatch(statusUserAC('succeeded'))
+			})
+
+
+		}
+		dispatch(setCurrentPageSavedVacancies(currentPage))
+
+		dispatch(setArrayIdAC(IdsArray))
+
+	}
+}
+
+
+
+
+export const getCurrentsVacanciesTC = (arrayVacancy:number) => {
 	return (dispatch: Dispatch<actionTypes>) => {
 		dispatch(statusUserAC('loading'))
 		LoginApi.getCurrentsVacancies(arrayVacancy)
@@ -141,7 +213,7 @@ export const getCurrentsVacanciesTC = (currentPage:number,arrayVacancy:number) =
 				}]
 				const totalPage=10000
 				
-				dispatch(setListVacanciesV2(resData,currentPage,totalPage))
+				dispatch(setListVacanciesV2(resData))
 				dispatch(errorUserAC(null))
 				dispatch(statusUserAC('succeeded'))
 			})
@@ -180,7 +252,7 @@ export const getBranchsTC = () => {
 export const authRequestAC = (value: ResultAuthType) =>({ type: 'FROM-AUTH-REQUEST', value } as const)
 
 export const setListVacancies = (value: Array<VacancyDataType>,page:number,totalPage:number) =>({ type: 'SET-LIST-VACANCIES', value,page,totalPage } as const)
-export const setListVacanciesV2 = (value: Array<VacancyDataType>,page:number,totalPage:number) =>({ type: 'SET-LIST-VACANCIES-V2', value,page,totalPage } as const)
+export const setListVacanciesV2 = (value: Array<VacancyDataType>) =>({ type: 'SET-LIST-VACANCIES-V2', value } as const)
 
 export const setBranchsAC = (value: Array<BranchsType>) =>({ type: 'SET-BRANCH', value } as const)
 
@@ -189,6 +261,9 @@ export const setPage = (value: number) =>({ type: 'SET-PAGE', value } as const)
 export const statusUserAC = (value: statusType) =>({ type: 'STATUS-USER', value } as const)
 export const deleteStateSavedVacanciesAC = () =>({ type: 'DELETE-SAVED-VACANCIES' } as const)
 export const setCurrentPageSavedVacancies = (currentPage:number) =>({ type: 'SET-CURRENT-PAGE-SAVED-VACANCIES',currentPage } as const)
+
+
+export const setArrayIdAC = (setArrayId:Array<string>) =>({ type: 'SET-ARRAY-ID',setArrayId } as const)
 
 // types
 export type InitialazedType = {
@@ -252,3 +327,4 @@ type actionTypes =
 	| ReturnType<typeof setListVacanciesV2>
 	| ReturnType<typeof deleteStateSavedVacanciesAC>
 	| ReturnType<typeof setCurrentPageSavedVacancies>
+	| ReturnType<typeof setArrayIdAC>

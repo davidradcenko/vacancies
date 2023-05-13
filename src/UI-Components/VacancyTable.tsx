@@ -1,12 +1,15 @@
 import { useSelector } from "react-redux"
 import { RootState, useAppDispatch } from "../store/store"
-import { VacancyDataType, deleteStateSavedVacanciesAC, getCurrentsVacanciesTC, getPublishVacanciesTC } from "../Reducer/initialazedReducer"
+import { VacancyDataType, deleteStateSavedVacanciesAC, getCurrentsVacanciesTC, getPublishVacanciesTC, setArrayIdAC } from "../Reducer/initialazedReducer"
 import location from '../assets/Location.png'
 import React, { useEffect, useState } from "react"
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import { StarForSaveVacancy } from "./StarsForSaveVacancy"
 import { nanoid } from 'nanoid'
 import { useTransition, animated } from "react-spring";
+import { PaginatorForSaveVacancies } from "./Paginator"
+
+
 export const VacancyTable= React.memo(()=>{
     const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
 
@@ -50,35 +53,37 @@ export const VacancyTable= React.memo(()=>{
 })
 
 
-
-
-export const SavedTableVacancies= React.memo(()=>{
+export const SavedTableVacancies= React.memo((props:{arrayId:Array<string>})=>{
 	
-    const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.savedVacancies.vacancies)
-    const currentPade = useSelector<RootState, number>(state => state.initialazed.savedVacancies.currentPage)
-
+	//dependens 
 	const dispatch = useAppDispatch()
+	const arrayIdFormRedux = useSelector<RootState, Array<string>>(state => state.initialazed.savedVacancies.arrayId)
+	const currentPage = useSelector<RootState, number>(state => state.initialazed.savedVacancies.currentPage)
+	const Vacancy = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.savedVacancies.vacancies)
+
+
+	// states
+	const [nowArray,setnowArray]=useState<Array<VacancyDataType>>([])
+	let mi_array:Array<string>=[]
+
+	// navigation
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
-		const v=JSON.stringify(ListofVacancies[id])
+		const v=JSON.stringify(Vacancy[id])
 		navigate(`/Info/${encodeURIComponent(v)}`)  
 	}
 
-	let mi_array:any=[]
-    const currentData  = localStorage.getItem("Id_Vacancies")
-    mi_array = currentData ? JSON.parse(currentData) : [];
 	
-	const [nowArray,setnowArray]=useState<Array<VacancyDataType>>([])
-
-
-
+	// if page change
 	useEffect(()=>{
+		const currentData  = localStorage.getItem("Id_Vacancies")
+		mi_array = currentData ? JSON.parse(currentData) : [];
+		
 		dispatch(deleteStateSavedVacanciesAC())
-	},[])
-	useEffect(()=>{
+
 		let iteral=0
-		let start=(currentPade*4)-4
-		if(currentPade==1){
+		let start=(currentPage*4)-4
+		if(currentPage==1){
 			start=0
 		}
 		for(let i=start;i<=mi_array.length-1;i++){
@@ -86,33 +91,43 @@ export const SavedTableVacancies= React.memo(()=>{
 				break
 			}
 			iteral=iteral+1
-			dispatch(getCurrentsVacanciesTC(currentPade,mi_array[i]))
+			dispatch(getCurrentsVacanciesTC(Number(mi_array[i])))
 		}
-	},[currentPade])
-	useEffect(()=>{
-		    const nowArray=ListofVacancies
-			let mi_array:any=[]
-    const currentData  = localStorage.getItem("Id_Vacancies")
-    mi_array = currentData ? JSON.parse(currentData) : []
-			type m={
-				id:number
-			}
-			const localST:Array<m>=mi_array.map((l:number)=>({id:l}))
+		dispatch(setArrayIdAC(mi_array))
+	},[currentPage])
 
-			const orderObj = localST.reduce( (a:any,c:any,i:any) => { a[c.id] = i; return a; } , {});
-			const mv=nowArray
-			mv.sort( (l:any,r:any) =>  orderObj[l.id] - orderObj[r.id] );
-			setnowArray(mv)
-	},[ListofVacancies])
+
+	// if list whis vacancy changed
+	useEffect(()=>{
+		const w=Vacancy
+		let mi_array:any=[]
+		const currentData  = localStorage.getItem("Id_Vacancies")
+		mi_array = currentData ? JSON.parse(currentData) : []
+		const localST:Array<{id:number}>=mi_array.map((l:number)=>({id:l}))
+	
+		const orderObj = localST.reduce( (a:any,c:any,i:any) => { a[c.id] = i; return a; } , {});
+		
+		w.sort( (l:any,r:any) =>  orderObj[l.id] - orderObj[r.id] );
+		setnowArray(w)
+	},[Vacancy])
+
+
+	//when side oll time 
+	useEffect(()=>{
+		const currentData  = localStorage.getItem("Id_Vacancies")
+		mi_array = currentData ? JSON.parse(currentData) : [];
+	},[])
+
+	// convert array int to string
+	const numberArray: number[] = arrayIdFormRedux.map((element: string) => parseFloat(element));
 
     return <>
     {nowArray.map((item,index)=>{
-		debugger
 						return <div key={nanoid()} className='Main-margin'>
 							<div className='Info-Vacancy'>
 								<div className='Name-and-Stars'>
 									<p onClick={()=>Redirect(index)} >{item.profession}</p>
-									<StarForSaveVacancy id={item.id} active={mi_array.includes(item.id)?true:false}/>
+									<StarForSaveVacancy id={item.id} active={numberArray.includes((item.id))?true:false}/>
 								</div>
 
 								<div className='Salary-and-TypeWork'>
@@ -131,6 +146,8 @@ export const SavedTableVacancies= React.memo(()=>{
 							</div>
 						</div>
 						})}
+
+		<PaginatorForSaveVacancies total={arrayIdFormRedux.length} currentPage={currentPage}/>
     </>
 })
 

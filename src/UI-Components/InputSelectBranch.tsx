@@ -22,15 +22,6 @@ import { RootState, useAppDispatch } from '../store/store'
 	return (
 		<>
 			<div className='OTR'>
-				{/* <Select
-					label='Отрасль'
-					placeholder='Отрасль'
-					dropdownPosition='bottom'
-					rightSection={<IconChevronDown />}
-					rightSectionWidth={30}
-					styles={{ rightSection: { pointerEvents: 'none' } }}
-					data={['React', 'Angular', 'Svelte', 'Vue']}
-				/> */}
 				<Select
 					searchable
 					nothingFound='No options'

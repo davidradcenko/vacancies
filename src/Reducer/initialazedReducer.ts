@@ -110,6 +110,29 @@ export const initializeAppTC = () => {
 					setAuthForAXIOS(m)
 				}
 				
+
+				dispatch(statusUserAC('loading'))
+				LoginApi.getBranchs()
+					.then(rese => {
+						const resData: Array<BranchsType> = rese.data.map((item: any) => ({
+							value: String(item.key),
+							label: item.title_rus,
+						}))
+						dispatch(setBranchsAC(resData))
+						dispatch(errorUserAC(null))
+						dispatch(statusUserAC('succeeded'))
+					})
+					.catch(error => {
+						debugger
+						// dispatch(errorUserAC(error.response.data.notification_type))
+						dispatch(errorUserAC(error.message))
+						dispatch(statusUserAC('succeeded'))
+					})
+
+
+
+
+
 				dispatch(authRequestAC(datas))
 				dispatch(errorUserAC(null))
 				dispatch(statusUserAC('succeeded'))

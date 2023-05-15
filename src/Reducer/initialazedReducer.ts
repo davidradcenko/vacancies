@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Dispatch } from 'redux'
-import { LoginApi } from '../api/VacanciesAPI'
+import { LoginApi, dd, setAuthForAXIOS } from '../api/VacanciesAPI'
 import SavedVacancies from '../Layouts/SavedVacancies'
 import { useAppDispatch } from '../store/store'
 
@@ -105,6 +105,11 @@ export const initializeAppTC = () => {
 		LoginApi.authMe()
 			.then(res => {
 				const datas: ResultAuthInterfase = res.data
+				if(datas.access_token){
+					const m=String( localStorage.setItem('access_token',datas.access_token))
+					setAuthForAXIOS(m)
+				}
+				
 				dispatch(authRequestAC(datas))
 				dispatch(errorUserAC(null))
 				dispatch(statusUserAC('succeeded'))
@@ -119,7 +124,7 @@ export const initializeAppTC = () => {
 export const getPublishVacanciesTC = (currentPage:number) => {
 	return (dispatch: Dispatch<actionTypes>) => {
 		dispatch(statusUserAC('loading'))
-		LoginApi.getPublishVacancies(currentPage)
+		dd.getPublishVacancies(currentPage)
 			.then(res => {
 
 				const resData: Array<VacancyDataType> = res.data.objects.map((item: any) => ({
@@ -164,7 +169,7 @@ export const NewArrayOfIDs = (IdsArray:Array<string>,currentPage:number) => {
 
 		iteral=iteral+1
 		const id=Number(IdsArray[i])
-		LoginApi.getCurrentsVacancies(id).then(res => {
+		dd.getCurrentsVacancies(id).then(res => {
 				const resData: Array<VacancyDataType> = [{
 					id:res.data.id,
 					profession:res.data.profession,
@@ -200,7 +205,7 @@ export const NewArrayOfIDs = (IdsArray:Array<string>,currentPage:number) => {
 export const getCurrentsVacanciesTC = (arrayVacancy:number) => {
 	return (dispatch: Dispatch<actionTypes>) => {
 		dispatch(statusUserAC('loading'))
-		LoginApi.getCurrentsVacancies(arrayVacancy)
+		dd.getCurrentsVacancies(arrayVacancy)
 			.then(res => {
 				const resData: Array<VacancyDataType> = [{
 					id:res.data.id,

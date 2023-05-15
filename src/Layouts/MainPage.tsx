@@ -16,6 +16,7 @@ const  MainPage=React.memo(()=> {
 	
 	useEffect(() => {
 		if(Branches){
+			debugger
 			dispatch(getPublishVacanciesTC(page))
 		}
 		

@@ -158,10 +158,11 @@ export const initializeAppTC = () => {
 	}
 }
 
-export const getPublishVacanciesTC = (currentPage:number,catalogues=0,payment_from=0,payment_to=0) => {
+export const getPublishVacanciesTC = (currentPage:number,catalogues=0,payment_from=0,payment_to=0,valueSearch="") => {
 	return (dispatch: Dispatch<actionTypes>) => {
 		dispatch(statusUserAC('loading'))
-		dd.getPublishVacancies(currentPage,catalogues,payment_from,payment_to)
+		debugger
+		dd.getPublishVacancies(currentPage,catalogues,payment_from,payment_to,valueSearch)
 			.then(res => {
 
 				const resData: Array<VacancyDataType> = res.data.objects.map((item: any) => ({
@@ -171,7 +172,8 @@ export const getPublishVacanciesTC = (currentPage:number,catalogues=0,payment_fr
 					currency:item.currency, 
 					type_of_work:item.type_of_work.title,
 					town:item.town.genitive,
-					MoreInfo:item.vacancyRichText
+					MoreInfo:item.vacancyRichText,
+					payment_to:item.payment_to
 				}))
 				const totalPage=res.data.total
 				
@@ -214,7 +216,8 @@ export const NewArrayOfIDs = (IdsArray:Array<string>,currentPage:number) => {
 					currency:res.data.currency, 
 					type_of_work:res.data.type_of_work.title,
 					town:res.data.town.genitive,
-					MoreInfo:res.data.vacancyRichText
+					MoreInfo:res.data.vacancyRichText,
+					payment_to:res.data.payment_to
 				}]
 				const totalPage=10000
 				
@@ -251,7 +254,8 @@ export const getCurrentsVacanciesTC = (arrayVacancy:number) => {
 					currency:res.data.currency, 
 					type_of_work:res.data.type_of_work.title,
 					town:res.data.town.genitive,
-					MoreInfo:res.data.vacancyRichText
+					MoreInfo:res.data.vacancyRichText,
+					payment_to:res.data.payment_to
 				}]
 				const totalPage=10000
 				
@@ -343,6 +347,7 @@ export type VacancyDataType={
 	id:number
 	profession:string
 	payment_from:number
+	payment_to:number
 	currency:'rub' | 'uah' | 'uzs' 
 	type_of_work:string
 	town:string,

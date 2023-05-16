@@ -35,7 +35,7 @@ export const VacancyTable= React.memo(()=>{
 
 								<div className='Salary-and-TypeWork'>
 									{item.payment_from==0
-									?<p className='In-Salary'>з/п Не указано</p>
+									?item.payment_to==0?<p className='In-Salary'>з/п Не указано</p>:<p className='In-Salary'>з/п до {item.payment_to}</p>
 									:<p className='In-Salary'>з/п от {item.payment_from} {item.currency}</p>}
 									
 									<p className='In-Dart'>•</p>
@@ -132,7 +132,7 @@ export const SavedTableVacancies= React.memo((props:{arrayId:Array<string>})=>{
 
 								<div className='Salary-and-TypeWork'>
 									{item.payment_from==0
-									?<p className='In-Salary'>з/п Не указано</p>
+									?item.payment_to==0?<p className='In-Salary'>з/п Не указано</p>:<p className='In-Salary'>з/п до {item.payment_to}</p>
 									:<p className='In-Salary'>з/п от {item.payment_from} {item.currency}</p>}
 									
 									<p className='In-Dart'>•</p>

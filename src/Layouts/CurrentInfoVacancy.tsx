@@ -7,7 +7,7 @@ import { StarForSaveVacancy } from '../UI-Components/StarsForSaveVacancy'
 
 export const CurrentInfoVacancy=()=> {
 	const navigate= useNavigate()
-	let vacancy:VacancyDataType={id:1,profession:"",payment_from:1,currency:'rub' ,type_of_work:"string",town:"string",MoreInfo:"string"}
+	let vacancy:VacancyDataType={id:1,profession:"",payment_from:1,currency:'rub' ,type_of_work:"string",town:"string",MoreInfo:"string",payment_to:1}
 
 	debugger
 	const {abject} =  useParams<"abject">()
@@ -43,7 +43,7 @@ return (
 
 			<div className='Main-Info-Salary-and-TypeWork'>
 			{vacancy.payment_from==0
-				?<p className='Main-Info-In-Salary'>з/п Не указано</p>
+				?vacancy.payment_to==0?<p className='In-Salary'>з/п Не указано</p>:<p className='In-Salary'>з/п до {vacancy.payment_to}</p>
 				:<p className='Main-Info-In-Salary'>з/п от {vacancy.payment_from} {vacancy.currency}</p>}
 
 				<p className='Main-Info-In-Dart'>•</p>

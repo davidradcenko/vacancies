@@ -13,11 +13,14 @@ const  MainPage=React.memo(()=> {
 	const dispatch = useAppDispatch()
 	const Branches = useSelector<RootState, string | null>(state => state.initialazed.datasReqAuth.access_token)
 	const page = useSelector<RootState, number>(state => state.initialazed.curentPageVacancies)
+	const selectBranch = useSelector<RootState, number>(state => state.initialazed.filter.selectBranch)
+	const payment_from = useSelector<RootState, number>(state => state.initialazed.filter.startPrice)
+	const payment_to = useSelector<RootState, number>(state => state.initialazed.filter.endPrice)
+	
 	
 	useEffect(() => {
 		if(Branches){
-			debugger
-			dispatch(getPublishVacanciesTC(page))
+			dispatch(getPublishVacanciesTC(page,selectBranch,payment_from,payment_to))
 		}
 		
 	},[Branches,page])

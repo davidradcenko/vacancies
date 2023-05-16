@@ -6,13 +6,17 @@ import { useFormik } from 'formik'
 import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '../store/store'
 import { BranchsType, getPublishVacanciesTC, setFilterAC } from '../Reducer/initialazedReducer'
-import React  from 'react'
+import React, { useEffect }  from 'react'
 
 export default function FilterVacancies(props: any) {
 	const dispatch = useAppDispatch()
 
 	const page = useSelector<RootState, number>(state => state.initialazed.curentPageVacancies)
 	const Branches = useSelector<RootState, Array<BranchsType>>(state => state.initialazed.branchs)
+
+	const selectBranch = useSelector<RootState, number>(state => state.initialazed.filter.selectBranch)
+	const payment_from = useSelector<RootState, number>(state => state.initialazed.filter.startPrice)
+	const payment_to = useSelector<RootState, number>(state => state.initialazed.filter.endPrice)
 	const [value, setValue] = React.useState<string | null>(null)
 
 	const ChangeC = (name: string | null ) => {
@@ -22,6 +26,7 @@ export default function FilterVacancies(props: any) {
 
 	const ClearAllValues=()=>{
 		formik.setValues({SelectBranch:"",endPrice:0,startPrice:0})
+		dispatch(setFilterAC(0,0,0))
 	}
 
 	type FormikErrorType = {
@@ -42,10 +47,12 @@ export default function FilterVacancies(props: any) {
         },
         onSubmit: values => {
 			dispatch(setFilterAC(Number(values.SelectBranch),values.startPrice,values.endPrice))
-            dispatch(getPublishVacanciesTC(page,Number(values.SelectBranch),values.startPrice,values.endPrice))
+            // dispatch(getPublishVacanciesTC(page,Number(values.SelectBranch),values.startPrice,values.endPrice))
         },
     })
-	
+	useEffect(()=>{
+		formik.setValues({SelectBranch:String(selectBranch),endPrice:payment_to,startPrice:payment_from})
+	},[])
 	return (
 		<div className='filter'>
 

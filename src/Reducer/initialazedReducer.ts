@@ -24,6 +24,12 @@ const Initial: InitialazedType = {
 	curentPageVacancies:1,
 	totalPage:0,
 	branchs: [],
+	filter:{
+		selectBranch:0,
+		startPrice:0,
+		endPrice:0,
+		inputSearchValue:''
+	}
 }
 
 export const initialazedReducer = (state: InitialazedType = Initial,action: actionTypes): InitialazedType => {
@@ -93,6 +99,14 @@ export const initialazedReducer = (state: InitialazedType = Initial,action: acti
 				}
 			}
 		}
+		case 'SET-FILTER':{
+			return{...state,filter:{
+				selectBranch:action.selectBranch==0?state.filter.selectBranch:action.selectBranch,
+				startPrice:action.startPrice==0?state.filter.startPrice:action.startPrice,
+				endPrice:action.endPrice==0?state.filter.endPrice:action.endPrice,
+				inputSearchValue:action.inputSearchValue==''?state.filter.inputSearchValue:action.inputSearchValue
+			}}
+		}
 		default:
 			return state
 	}
@@ -144,10 +158,10 @@ export const initializeAppTC = () => {
 	}
 }
 
-export const getPublishVacanciesTC = (currentPage:number) => {
+export const getPublishVacanciesTC = (currentPage:number,catalogues=0,payment_from=0,payment_to=0) => {
 	return (dispatch: Dispatch<actionTypes>) => {
 		dispatch(statusUserAC('loading'))
-		dd.getPublishVacancies(currentPage)
+		dd.getPublishVacancies(currentPage,catalogues,payment_from,payment_to)
 			.then(res => {
 
 				const resData: Array<VacancyDataType> = res.data.objects.map((item: any) => ({
@@ -275,6 +289,8 @@ export const getBranchsTC = () => {
 	}
 }
 
+
+
 // actions
 
 export const authRequestAC = (value: ResultAuthType) =>({ type: 'FROM-AUTH-REQUEST', value } as const)
@@ -292,6 +308,7 @@ export const setCurrentPageSavedVacancies = (currentPage:number) =>({ type: 'SET
 
 
 export const setArrayIdAC = (setArrayId:Array<string>) =>({ type: 'SET-ARRAY-ID',setArrayId } as const)
+export const setFilterAC = (selectBranch=0,startPrice=0,endPrice=0,inputSearchValue='') =>({ type: 'SET-FILTER',selectBranch,startPrice,endPrice,inputSearchValue} as const)
 
 // types
 export type InitialazedType = {
@@ -314,6 +331,13 @@ export type InitialazedType = {
 	}
 	curentPageVacancies:number
 	totalPage:number
+	filter:filterType
+}
+export type filterType={
+		selectBranch:number,
+		startPrice:number,
+		endPrice:number,
+		inputSearchValue:string
 }
 export type VacancyDataType={
 	id:number
@@ -356,3 +380,4 @@ type actionTypes =
 	| ReturnType<typeof deleteStateSavedVacanciesAC>
 	| ReturnType<typeof setCurrentPageSavedVacancies>
 	| ReturnType<typeof setArrayIdAC>
+	| ReturnType<typeof setFilterAC>

@@ -4,13 +4,14 @@ import InputSelectBranch from '../UI-Components/InputSelectBranch'
 import SalaryScale from '../UI-Components/SalaryScale'
 import { useFormik } from 'formik'
 import { useSelector } from 'react-redux'
-import { RootState } from '../store/store'
-import { BranchsType } from '../Reducer/initialazedReducer'
+import { RootState, useAppDispatch } from '../store/store'
+import { BranchsType, getPublishVacanciesTC, setFilterAC } from '../Reducer/initialazedReducer'
 import React  from 'react'
 
 export default function FilterVacancies(props: any) {
+	const dispatch = useAppDispatch()
 
-
+	const page = useSelector<RootState, number>(state => state.initialazed.curentPageVacancies)
 	const Branches = useSelector<RootState, Array<BranchsType>>(state => state.initialazed.branchs)
 	const [value, setValue] = React.useState<string | null>(null)
 
@@ -19,6 +20,9 @@ export default function FilterVacancies(props: any) {
 		formik.setValues({SelectBranch:name?name:"",endPrice:formik.values.endPrice,startPrice:formik.values.startPrice})
 	}
 
+	const ClearAllValues=()=>{
+		formik.setValues({SelectBranch:"",endPrice:0,startPrice:0})
+	}
 
 	type FormikErrorType = {
         startPrice?: string
@@ -37,18 +41,11 @@ export default function FilterVacancies(props: any) {
             endPrice: 0
         },
         onSubmit: values => {
-			debugger
-            // dispatch(loginIn(values))
+			dispatch(setFilterAC(Number(values.SelectBranch),values.startPrice,values.endPrice))
+            dispatch(getPublishVacanciesTC(page,Number(values.SelectBranch),values.startPrice,values.endPrice))
         },
     })
-	// useEffect(() => {
-    //     formik.setValues({
-    //         SelectBranch: Branches,
-	// 		endPrice:'1',
-	// 		startPrice:'1'
-    //     })
-    // }, [Branches])
-
+	
 	return (
 		<div className='filter'>
 
@@ -57,7 +54,7 @@ export default function FilterVacancies(props: any) {
 					<div className='Name-Filter'>
 						<p>Фильтры</p>
 						<p>
-							Сбросить все <CloseIcon />
+							Сбросить все <CloseIcon onClick={ClearAllValues}/>
 						</p>
 					</div>
 
@@ -83,7 +80,7 @@ export default function FilterVacancies(props: any) {
 							step={50}
 							min={0}
 							onChange={(e)=>formik.setValues({SelectBranch:formik.values.SelectBranch,endPrice:formik.values.endPrice,startPrice:e?e:0})}
-							value={formik.values.startPrice}
+							value={formik.values.startPrice==0?'':formik.values.startPrice}
 						/>
 						<NumberInput
 							placeholder={'До'}
@@ -93,7 +90,7 @@ export default function FilterVacancies(props: any) {
 							stepHoldInterval={t => Math.max(1000 / t ** 2, 25)}
 							sx={{ marginBottom: 20 }}
 							onChange={(e)=>formik.setValues({SelectBranch:formik.values.SelectBranch,endPrice:e?e:0,startPrice:formik.values.startPrice})}
-							value={formik.values.endPrice}
+							value={formik.values.endPrice==0?'':formik.values.endPrice}
 						/>
 						<p>{formik.errors.startPrice}</p>
 					</div>

@@ -47,14 +47,23 @@ export const LoginApi = {
 }
 export const dd = {
 	getPublishVacancies(page:number,catalogues:number,payment_from:number,payment_to:number,valueSearch:string){
+		// catalogues payment_from payment_to valueSearch
 		if(catalogues!=0 && payment_from!=0 && payment_to!=0  && valueSearch!=""){
-			debugger
-			return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1&published=1&catalogues=${catalogues}&payment_from=${payment_from}&payment_to=${payment_to}&no_agreement=1&keyword=${valueSearch}`)
-		} if(catalogues!=0 && payment_from!=0 && payment_to!=0){
-			return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1&published=1&catalogues=${catalogues}&payment_from=${payment_from}&payment_to=${payment_to}&no_agreement=1`)
-		}else{
-			return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1`)
-		}	
+			return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1&catalogues=${catalogues}&payment_from=${payment_from}&payment_to=${payment_to}&no_agreement=1&keyword=${valueSearch}`)
+		}
+		// catalogues payment_from payment_to
+		if(catalogues!=0 && payment_from!=0 && payment_to!=0 && valueSearch==""){
+			return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1&catalogues=${catalogues}&payment_from=${payment_from}&payment_to=${payment_to}&no_agreement=1`)
+		}
+		//valueSearch
+		if(catalogues==0 && payment_from==0 && payment_to==0  && valueSearch!=""){
+			return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1&no_agreement=1&keyword=${valueSearch}`)
+		}
+		//valueSearch
+		if(catalogues!=0 && payment_from==0 && payment_to==0  && valueSearch!=""){
+			return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1&no_agreement=1&catalogues=${catalogues}&keyword=${valueSearch}`)
+		}
+		return instanceBeforAuth.get(`vacancies/?page=${page}&count=4&published=1`)	
 	},
 	getCurrentsVacancies(id:number){
 		return instanceBeforAuth.get(`vacancies/${id}/`)

@@ -16,11 +16,11 @@ const  MainPage=React.memo(()=> {
 	const selectBranch = useSelector<RootState, number>(state => state.initialazed.filter.selectBranch)
 	const payment_from = useSelector<RootState, number>(state => state.initialazed.filter.startPrice)
 	const payment_to = useSelector<RootState, number>(state => state.initialazed.filter.endPrice)
-	
+	const searchValue = useSelector<RootState, string>(state => state.initialazed.filter.inputSearchValue)
 	
 	useEffect(() => {
 		if(Branches){
-			dispatch(getPublishVacanciesTC(page,selectBranch,payment_from,payment_to))
+			dispatch(getPublishVacanciesTC(page,selectBranch,payment_from,payment_to,searchValue))
 		}
 		
 	},[Branches,page])

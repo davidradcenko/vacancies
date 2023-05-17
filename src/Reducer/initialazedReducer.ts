@@ -21,7 +21,7 @@ const Initial: InitialazedType = {
 		currentPage:1,
 		arrayId:[]
 	},
-	curentPageVacancies:1,
+	curentPageVacancies:0,
 	totalPage:0,
 	branchs: [],
 	filter:{
@@ -101,10 +101,10 @@ export const initialazedReducer = (state: InitialazedType = Initial,action: acti
 		}
 		case 'SET-FILTER':{
 			return{...state,filter:{
-				selectBranch:action.selectBranch==0?state.filter.selectBranch:action.selectBranch,
-				startPrice:action.startPrice==0?state.filter.startPrice:action.startPrice,
-				endPrice:action.endPrice==0?state.filter.endPrice:action.endPrice,
-				inputSearchValue:action.inputSearchValue==''?state.filter.inputSearchValue:action.inputSearchValue
+				selectBranch:action.selectBranch,
+				startPrice:action.startPrice,
+				endPrice:action.endPrice,
+				inputSearchValue:action.inputSearchValue
 			}}
 		}
 		default:
@@ -161,7 +161,6 @@ export const initializeAppTC = () => {
 export const getPublishVacanciesTC = (currentPage:number,catalogues=0,payment_from=0,payment_to=0,valueSearch="") => {
 	return (dispatch: Dispatch<actionTypes>) => {
 		dispatch(statusUserAC('loading'))
-		debugger
 		dd.getPublishVacancies(currentPage,catalogues,payment_from,payment_to,valueSearch)
 			.then(res => {
 
@@ -312,7 +311,7 @@ export const setCurrentPageSavedVacancies = (currentPage:number) =>({ type: 'SET
 
 
 export const setArrayIdAC = (setArrayId:Array<string>) =>({ type: 'SET-ARRAY-ID',setArrayId } as const)
-export const setFilterAC = (selectBranch=0,startPrice=0,endPrice=0,inputSearchValue='') =>({ type: 'SET-FILTER',selectBranch,startPrice,endPrice,inputSearchValue} as const)
+export const setFilterAC = (selectBranch:number,startPrice:number,endPrice:number,inputSearchValue:string) =>({ type: 'SET-FILTER',selectBranch,startPrice,endPrice,inputSearchValue} as const)
 
 // types
 export type InitialazedType = {

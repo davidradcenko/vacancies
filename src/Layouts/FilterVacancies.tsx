@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '../store/store'
 import { BranchsType, getPublishVacanciesTC, setFilterAC } from '../Reducer/initialazedReducer'
 import React, { useEffect }  from 'react'
+import { IconChevronDown } from '@tabler/icons-react'
+import vectorSelect  from '../assets/VectorSelect.svg'
 
 export default function FilterVacancies(props: any) {
 	const dispatch = useAppDispatch()
@@ -17,6 +19,7 @@ export default function FilterVacancies(props: any) {
 	const selectBranch = useSelector<RootState, number>(state => state.initialazed.filter.selectBranch)
 	const payment_from = useSelector<RootState, number>(state => state.initialazed.filter.startPrice)
 	const payment_to = useSelector<RootState, number>(state => state.initialazed.filter.endPrice)
+	const searchValue = useSelector<RootState, string>(state => state.initialazed.filter.inputSearchValue)
 	const [value, setValue] = React.useState<string | null>(null)
 
 	const ChangeC = (name: string | null ) => {
@@ -25,8 +28,8 @@ export default function FilterVacancies(props: any) {
 	}
 
 	const ClearAllValues=()=>{
+		dispatch(setFilterAC(0,0,0,searchValue))
 		formik.setValues({SelectBranch:"",endPrice:0,startPrice:0})
-		dispatch(setFilterAC(0,0,0))
 	}
 
 	type FormikErrorType = {
@@ -46,8 +49,8 @@ export default function FilterVacancies(props: any) {
             endPrice: 0
         },
         onSubmit: values => {
-			dispatch(setFilterAC(Number(values.SelectBranch),values.startPrice,values.endPrice))
-            // dispatch(getPublishVacanciesTC(page,Number(values.SelectBranch),values.startPrice,values.endPrice))
+			dispatch(setFilterAC(Number(values.SelectBranch),values.startPrice,values.endPrice,searchValue))
+            dispatch(getPublishVacanciesTC(0,Number(values.SelectBranch),values.startPrice,values.endPrice,searchValue))
         },
     })
 	useEffect(()=>{
@@ -67,13 +70,16 @@ export default function FilterVacancies(props: any) {
 
 					<div className='OTR'>
 						<Select
-							// data={{...formik.getFieldProps("SelectBranch")}}
 							searchable
 							nothingFound='No options'
-							// value={value}
+							rightSection={<img src={vectorSelect}/>}
+							rightSectionWidth={30}
 							value={formik.values.SelectBranch}
 							onChange={(e)=>ChangeC(e)}
 							data={Branches}
+							// readOnly
+							placeholder="Выберите отрасль"
+							data-elem="industry-select"
 						/>
 					</div>
 

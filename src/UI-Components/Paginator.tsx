@@ -13,14 +13,14 @@ export const Paginator=React.memo(()=> {
 	const [activePage, setActivePage] = useState<number>(currentPage)
 	
 	const changeActivePage=(page:number)=>{
-		setActivePage(page)
-		dispatch(setPage(page))
+		setActivePage(page-1)
+		dispatch(setPage(page-1))
 	}
 
 	return (
 		<>
 			<div className='paginator'>
-				<Pagination value={activePage==0?1:activePage} onChange={(e)=>changeActivePage(e)} total={totalPage==0?1:totalPage} />
+				<Pagination value={activePage+1} onChange={(e)=>changeActivePage(e)} total={Math.ceil((totalPage+1)/4)} />
 			</div>
 		</>
 	)

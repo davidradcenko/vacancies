@@ -9,6 +9,7 @@ import { BranchsType, getPublishVacanciesTC, setFilterAC } from '../Reducer/init
 import React, { useEffect }  from 'react'
 import { IconChevronDown } from '@tabler/icons-react'
 import vectorSelect  from '../assets/VectorSelect.svg'
+import VectorSelectDone  from '../assets/VectorSelectDone.svg'
 
 export default function FilterVacancies(props: any) {
 	const dispatch = useAppDispatch()
@@ -21,9 +22,18 @@ export default function FilterVacancies(props: any) {
 	const payment_to = useSelector<RootState, number>(state => state.initialazed.filter.endPrice)
 	const searchValue = useSelector<RootState, string>(state => state.initialazed.filter.inputSearchValue)
 	const [value, setValue] = React.useState<string | null>(null)
+	const [valueSelectInput, setValueSelectInput] = React.useState<boolean>(false)
+
+	const handleSelectInput=()=>{
+		setValueSelectInput(!valueSelectInput)
+	}
+	const handleSelectInput1=()=>{
+		setValueSelectInput(false)
+	}
 
 	const ChangeC = (name: string | null ) => {
 		setValue(name)
+		setValueSelectInput(false)
 		formik.setValues({SelectBranch:name?name:"",endPrice:formik.values.endPrice,startPrice:formik.values.startPrice})
 	}
 
@@ -58,28 +68,37 @@ export default function FilterVacancies(props: any) {
 	},[])
 	return (
 		<div className='filter'>
-
+<div className='filter-container'>
 			<form onSubmit={formik.handleSubmit}>
-				<div className='filter-container'>
+				
 					<div className='Name-Filter'>
 						<p>Фильтры</p>
 						<p>
-							Сбросить все <CloseIcon onClick={ClearAllValues}/>
+							<Button variant="subtle"> Сбросить все <CloseIcon onClick={ClearAllValues}/></Button>
 						</p>
 					</div>
 
 					<div className='OTR'>
 						<Select
-							searchable
 							nothingFound='No options'
-							rightSection={<img src={vectorSelect}/>}
-							rightSectionWidth={30}
+							rightSection={<img src={valueSelectInput?VectorSelectDone:vectorSelect}/>}
+							transitionProps={{ transition: 'pop-top-left', duration: 80, timingFunction: 'ease' }}
 							value={formik.values.SelectBranch}
 							onChange={(e)=>ChangeC(e)}
 							data={Branches}
-							// readOnly
+							onDropdownOpen={handleSelectInput}
+							onDropdownClose={handleSelectInput1}
+							// styles={{rightSection: { pointerEvents: 'none'}}} 
 							placeholder="Выберите отрасль"
 							data-elem="industry-select"
+							sx={{borderRadius:'8px'}}
+							styles={{
+								item: {
+								'&[data-selected]':{ backgroundColor:'#5E96FC'},
+								'&[data-hovered]': {backgroundColor:'#DEECFF'},
+								},
+								rightSection: { pointerEvents: 'none'}
+							}}
 						/>
 					</div>
 
@@ -88,20 +107,26 @@ export default function FilterVacancies(props: any) {
 							label='Оклад'
 							placeholder={'От'}
 							stepHoldDelay={500}
+							inputMode='numeric'
+							pattern='[0-9]*'
 							stepHoldInterval={100}
-							sx={{ marginBottom: 10 }}
-							step={50}
+							
+							sx={{ marginBottom: 10,borderRadius:'8px',".mantine-x0i9fi,.mantine-1g3thxc":{border:'none',color:"#ACADB9"} }}
+							step={1000}
 							min={0}
+							defaultValue={0}
 							onChange={(e)=>formik.setValues({SelectBranch:formik.values.SelectBranch,endPrice:formik.values.endPrice,startPrice:e?e:0})}
 							value={formik.values.startPrice==0?'':formik.values.startPrice}
 						/>
 						<NumberInput
 							placeholder={'До'}
 							stepHoldDelay={500}
-							step={50}
+							step={1000}
+							inputMode='numeric'
+							pattern='[0-9]*'
 							min={0}
 							stepHoldInterval={t => Math.max(1000 / t ** 2, 25)}
-							sx={{ marginBottom: 20 }}
+							sx={{ marginBottom: 20,borderRadius:'8px',".mantine-x0i9fi,.mantine-1g3thxc":{border:'none',color:"#ACADB9"} }}
 							onChange={(e)=>formik.setValues({SelectBranch:formik.values.SelectBranch,endPrice:e?e:0,startPrice:formik.values.startPrice})}
 							value={formik.values.endPrice==0?'':formik.values.endPrice}
 						/>
@@ -113,9 +138,9 @@ export default function FilterVacancies(props: any) {
 							<Button type="submit" fullWidth>Применить</Button>
 						</Box>
 					</Flex>
-				</div>
+				
 			</form>
-			
+			</div>
 		</div>
 	)
 }

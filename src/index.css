@@ -70,13 +70,12 @@ ul {
 	justify-content: center;
 	align-items: center;
 }
-a:-webkit-any-link {
-	color: var(--Black);
-}
 .menu ul li {
 	margin-right: 50px;
 }
-
+.noSelectLink{
+	color: #232134;
+}
 /* main */
 
 .main {
@@ -88,8 +87,9 @@ a:-webkit-any-link {
 }
 .filter {
 	display: block;
-	width: auto;
-	border-radius: 10%;
+	width: 315px;
+	height: 360px;
+	border-radius: 12px;
 	background-color: var(--White);
 }
 .filter-container {
@@ -120,6 +120,9 @@ a:-webkit-any-link {
 	color: var(--Drey-500);
 	margin-left: 10px;
 }
+.active{
+	color: var(--Blue-500-main);
+}
 .Main-margin {
 	width: 100%;
 	margin-top: 16px;
@@ -129,8 +132,8 @@ a:-webkit-any-link {
 }
 /* main info */
 .vacancies {
-	width: 100%;
-	padding-left: 28px;
+	width: auto;
+	margin-left: 28px; 
 }
 .SearchButton {
 	border: 1px solid;

@@ -6,7 +6,7 @@ import React from "react";
 import { RootState, useAppDispatch } from './store/store'
 import { useSelector } from 'react-redux';
 import SavedVacancies from './Layouts/SavedVacancies';
-import {BrowserRouter, Link, Navigate, Route, Routes} from "react-router-dom";
+import {BrowserRouter, NavLink, Navigate, Route, Routes} from "react-router-dom";
 import { CurrentInfoVacancy } from './Layouts/CurrentInfoVacancy';
 
 
@@ -32,10 +32,10 @@ const  App=React.memo((props:any)=> {
 					<nav className='menu'>
 						<ul>
 							<li>
-								<Link to={'/'}>Поиск Вакансий</Link>
+								<NavLink className={"noSelectLink"} to={'/'}>Поиск Вакансий</NavLink>
 							</li>
 							<li>
-								<Link to={'Saved'}>Избранное</Link>
+								<NavLink className={"noSelectLink"} to={'Saved'}>Избранное</NavLink>
 							</li>
 						</ul>
 					</nav>

@@ -9,10 +9,10 @@ export const CurrentInfoVacancy=()=> {
 	const navigate= useNavigate()
 	let vacancy:VacancyDataType={id:1,profession:"",payment_from:1,currency:'rub' ,type_of_work:"string",town:"string",MoreInfo:"string",payment_to:1}
 
-	debugger
+	
 	const {abject} =  useParams<"abject">()
 
-	debugger
+	
 
 	if (!abject){
 		navigate(-1)
@@ -21,7 +21,7 @@ export const CurrentInfoVacancy=()=> {
 	}
 	
 	
-	debugger
+	
 	
 
 	

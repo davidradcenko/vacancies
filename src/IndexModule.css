@@ -7,4 +7,37 @@
     .main{
         flex-direction: column;
     }
+    .main{
+        padding-top: 10px;
+    }
+    .filter{
+        width: auto;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .vacancies{
+        width: auto;
+        margin: 10px;}
 }
+@media screen and (max-width:809px){
+    .Main-Info-Container{
+        width: auto;
+    }
+    .Main-Info-Vacancy{
+        margin: 10px;
+    }
+    .current-Info-Vacancy{
+        margin: 10px;
+    }
+}
+@media screen and (max-width:600px){
+.container{
+    flex-direction: column;
+    /* justify-content: start; */
+}
+.menu ul{
+    margin-top: 10px;
+}
+}
+
+

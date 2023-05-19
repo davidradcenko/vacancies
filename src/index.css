@@ -44,19 +44,19 @@ ul {
 }
 
 .header {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 100%;
 	background-color: var(--White);
 }
-
 .container {
-	margin: auto;
-	max-width: 1116px;
+	width: 1116px;
 	display: flex;
 	align-items: center;
 	padding-top: 15px;
 	padding-bottom: 15px;
 }
-
 .Logo {
 	display: block;
 }
@@ -111,7 +111,15 @@ ul {
 	margin-left: 28px;
 }
 
-
+.vacansiesContainer{
+	margin: 10px;
+	display: flex;
+	width: auto;
+	justify-content: center;
+}
+.vacansies-container{
+	width: 773px;
+}
 /* search info */
 .ResultSearch {
 	display: flex;
@@ -196,6 +204,8 @@ margin-right: 10px;
 }
 
 .paginator {
+	display: flex;
+	justify-content: center;
 	padding-top: 40px;
 }
 

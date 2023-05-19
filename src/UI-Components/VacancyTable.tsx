@@ -18,7 +18,6 @@ export const VacancyTable= React.memo(()=>{
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
 		const v=JSON.stringify(ListofVacancies[id])
-		debugger
 		navigate(`/Info/${encodeURIComponent(v)}`)  
 	}
 

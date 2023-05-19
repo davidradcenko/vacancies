@@ -45,7 +45,7 @@ const  App=React.memo((props:any)=> {
 			<Routes>
 				<Route path="/" element={<MainPage />}/>
 				<Route path="/Info/:abject" element={<CurrentInfoVacancy />}/>
-				<Route path="/Saved" element={<SavedVacancies />}/>
+				<Route path="/Saved/*" element={<SavedVacancies />}/>
 
 				<Route path="/404" element={<h1>404. Page not found</h1>}/>
                 <Route path="*" element={<Navigate to="/404"/>}/>

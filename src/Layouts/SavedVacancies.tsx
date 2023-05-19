@@ -17,7 +17,6 @@ export default function SavedVacancies() {
 	
     
 	useEffect(()=>{
-		debugger
 		const currentData  = localStorage.getItem("Id_Vacancies")
 		mi_array = currentData ? JSON.parse(currentData) : [];
 		dispatch(setArrayIdAC(mi_array))
@@ -27,8 +26,10 @@ export default function SavedVacancies() {
 		<>
 		{arrayIdFormRedux.length==0 
 		?<NoSavedVacancies />
-		:<div className='SavedVacancies'>
+		:<div className='vacansiesContainer'>
+			<div className='vacansies-container'>
 			<SavedTableVacancies arrayId={mi_array}/>
+			</div>
 		</div> 
 		}	
 		</>

@@ -20,7 +20,7 @@ export const Paginator=React.memo(()=> {
 	return (
 		<>
 			<div className='paginator'>
-				<Pagination value={activePage+1} onChange={(e)=>changeActivePage(e)} total={Math.ceil((totalPage+1)/4)} />
+				<Pagination value={activePage+1} onChange={(e)=>changeActivePage(e)} total={Math.ceil((totalPage)/4)>125?125:Math.ceil((totalPage)/4)} />
 			</div>
 		</>
 	)

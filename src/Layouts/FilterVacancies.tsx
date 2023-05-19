@@ -10,6 +10,7 @@ import React, { useEffect }  from 'react'
 import { IconChevronDown } from '@tabler/icons-react'
 import vectorSelect  from '../assets/VectorSelect.svg'
 import VectorSelectDone  from '../assets/VectorSelectDone.svg'
+import Filternone  from '../assets/filter-none.svg'
 
 export default function FilterVacancies(props: any) {
 	const dispatch = useAppDispatch()
@@ -48,9 +49,9 @@ export default function FilterVacancies(props: any) {
     const formik = useFormik({
         validate: (values) => {
             const errors: FormikErrorType = {};
-            if (values.startPrice>values.endPrice) {
-                errors.startPrice = 'Required';
-            } 
+            // if (values.startPrice>values.endPrice) {
+            //     errors.startPrice = 'Required';
+            // } 
             return errors;
         },
         initialValues: {
@@ -68,18 +69,24 @@ export default function FilterVacancies(props: any) {
 	},[])
 	return (
 		<div className='filter'>
-<div className='filter-container'>
+			<div className='filter-container'>
 			<form onSubmit={formik.handleSubmit}>
 				
 					<div className='Name-Filter'>
-						<p>Фильтры</p>
-						<p>
-							<Button variant="subtle"> Сбросить все <CloseIcon onClick={ClearAllValues}/></Button>
-						</p>
+						<p className='Name-Filter-fiter'>Фильтры</p>
+						
+							<Button sx={{width:'115px',height:'20px', margin:'0px',padding:'0px'}}  onClick={ClearAllValues} variant="subtle">
+								<div className='filter-div'>
+								<p className='filter-none'>Сбросить все</p>
+								<img className='filter-img-none' src={Filternone} alt="Filternone" />
+								</div>
+							</Button>
+						
 					</div>
 
 					<div className='OTR'>
 						<Select
+							label='Отрасль'
 							nothingFound='No options'
 							rightSection={<img src={valueSelectInput?VectorSelectDone:vectorSelect}/>}
 							transitionProps={{ transition: 'pop-top-left', duration: 80, timingFunction: 'ease' }}
@@ -88,7 +95,6 @@ export default function FilterVacancies(props: any) {
 							data={Branches}
 							onDropdownOpen={handleSelectInput}
 							onDropdownClose={handleSelectInput1}
-							// styles={{rightSection: { pointerEvents: 'none'}}} 
 							placeholder="Выберите отрасль"
 							data-elem="industry-select"
 							sx={{borderRadius:'8px'}}

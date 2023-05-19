@@ -19,7 +19,6 @@ export default function InputSearch() {
 	}
 
 	const SearchVacancy=()=>{
-		debugger
 		dispatch(getPublishVacanciesTC(0,selectBranch,payment_from,payment_to,value))
 	}
 	useEffect(()=>{
@@ -28,16 +27,16 @@ export default function InputSearch() {
 	return (
 		<Input
 			icon={<IconSearch size='1rem' />}
-			sx={{ maxWidth: '100%' }}
-			placeholder='Your twitter'
+			sx={{ maxWidth: '100%',height:'48px' }}
+			placeholder='Введите название вакансии'
 			value={value}
 			onChange={(e)=>handleChange(e.target.value)}
 			rightSection={
-				<Tooltip label='This is public' position='top-end' withArrow>
+				
 					<div className='SearchButton'>
-						<Button onClick={SearchVacancy} sx={{ marginRight: 12 }}>Settings</Button>
+						<Button onClick={SearchVacancy} sx={{ marginRight: 12 }}>Поиск</Button>
 					</div>
-				</Tooltip>
+				
 			}
 		/>
 	)

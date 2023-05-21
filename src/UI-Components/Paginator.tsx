@@ -4,16 +4,19 @@ import { RootState, useAppDispatch } from '../store/store'
 import { useSelector } from 'react-redux'
 import { deleteStateSavedVacanciesAC, setCurrentPageSavedVacancies, setPage } from '../Reducer/initialazedReducer'
 
+
+
+/* ------- INTRODUCTION ------- */
+/*
+	This component is responsible paginator logic for main page
+*/
 export const Paginator=React.memo(()=> {
 	const dispatch = useAppDispatch()
+
 	const totalPage = useSelector<RootState, number>(state => state.initialazed.totalPage)
 	const currentPage = useSelector<RootState, number>(state => state.initialazed.curentPageVacancies)
 
-
-	const [activePage, setActivePage] = useState<number>(currentPage)
-	
 	const changeActivePage=(page:number)=>{
-		setActivePage(page-1)
 		dispatch(setPage(page-1))
 	}
 
@@ -25,18 +28,16 @@ export const Paginator=React.memo(()=> {
 		</>
 	)
 })
-type PaginatorForSaveVacanciesType={
-	total:number,
-	currentPage:number
-}
 
 
 
-
-
-
+/* ------- INTRODUCTION ------- */
+/*
+	This component is responsible paginator logic for saved vacancy page
+*/
 export const PaginatorForSaveVacancies=React.memo((props:PaginatorForSaveVacanciesType)=> {
 	const dispatch = useAppDispatch()
+
 	const changeActivePage=(page:number)=>{
 		dispatch(deleteStateSavedVacanciesAC())
 		dispatch(setCurrentPageSavedVacancies(page))
@@ -50,3 +51,9 @@ export const PaginatorForSaveVacancies=React.memo((props:PaginatorForSaveVacanci
 		</>
 	)
 })
+
+// types 
+type PaginatorForSaveVacanciesType={
+	total:number,
+	currentPage:number
+}

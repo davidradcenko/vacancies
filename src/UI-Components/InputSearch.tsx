@@ -1,26 +1,37 @@
-import { Button, Input, Tooltip } from '@mantine/core'
-import React, { useEffect } from 'react'
+import { Button, Input} from '@mantine/core'
+import { useEffect } from 'react'
 import { IconSearch } from '@tabler/icons-react'
 import { RootState, useAppDispatch } from '../store/store'
 import { useSelector } from 'react-redux'
 import { getPublishVacanciesTC, setFilterAC } from '../Reducer/initialazedReducer'
 import { useState } from 'react'
+
+
+
+/* ------- INTRODUCTION ------- */
+/*
+	This component stores the logic Search Input
+*/
 export default function InputSearch() {
 	const dispatch = useAppDispatch()
+
 	const selectBranch = useSelector<RootState, number>(state => state.initialazed.filter.selectBranch)
 	const payment_from = useSelector<RootState, number>(state => state.initialazed.filter.startPrice)
 	const payment_to = useSelector<RootState, number>(state => state.initialazed.filter.endPrice)
 	const searchValue = useSelector<RootState, string>(state => state.initialazed.filter.inputSearchValue)
 
+	// state for input value
 	const [value,setValue]=useState<string>("")
 	const handleChange=(value:string)=>{
 		setValue(value)
-		dispatch(setFilterAC(0,0,0,value))
+		dispatch(setFilterAC(selectBranch,payment_from,payment_to,value))
 	}
 
+	//search request   
 	const SearchVacancy=()=>{
 		dispatch(getPublishVacanciesTC(0,selectBranch,payment_from,payment_to,value))
 	}
+
 	useEffect(()=>{
 		setValue(searchValue)
 	},[])

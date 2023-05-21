@@ -1,8 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import Notfound from '../assets/NoSavedVacancy.png'
 
+/* INTRODUCTION */
+/*
+	If there are no saved vacancies, this component is displayed
+*/
 export default function NoSavedVacancies() {
 	const navigate = useNavigate();
+	
 	const Redirect=()=>{
 		navigate('/')
 	}

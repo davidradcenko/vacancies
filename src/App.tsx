@@ -1,28 +1,29 @@
 import { useEffect } from 'react'
-import MainPage from './Layouts/MainPage'
-import {getBranchsTC,getPublishVacanciesTC,initializeAppTC,} from './Reducer/initialazedReducer'
+import {NavLink, Navigate, Route, Routes} from "react-router-dom";
+import {memo} from "react";
+
 import logo from './assets/logo.svg'
-import React from "react";
-import { RootState, useAppDispatch } from './store/store'
-import { useSelector } from 'react-redux';
+
+import { useAppDispatch } from './store/store'
+import MainPage from './Layouts/MainPage'
+import {initializeAppTC,} from './Reducer/initialazedReducer'
 import SavedVacancies from './Layouts/SavedVacancies';
-import {BrowserRouter, NavLink, Navigate, Route, Routes} from "react-router-dom";
 import { CurrentInfoVacancy } from './Layouts/CurrentInfoVacancy';
 
 
-const  App=React.memo((props:any)=> {
+/* ------- INTRODUCTION ------- */
+/*
+	The application router and the top header
+*/
+const  App = memo(()=> {
 	const dispatch = useAppDispatch()
 	
-
 	useEffect(() => {
 		dispatch(initializeAppTC())
 	},[])
 
-	
-
 	return (
 		<>
-		
 			<div className='header'>
 				<div className='container'>
 					<div className='Logo'>

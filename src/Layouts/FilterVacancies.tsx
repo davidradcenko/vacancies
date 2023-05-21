@@ -1,28 +1,32 @@
 import { Box, Button, Flex, NumberInput, Select } from '@mantine/core'
-import CloseIcon from '@mui/icons-material/Close'
-import InputSelectBranch from '../UI-Components/InputSelectBranch'
-import SalaryScale from '../UI-Components/SalaryScale'
 import { useFormik } from 'formik'
 import { useSelector } from 'react-redux'
+import React, { useEffect }  from 'react'
+
 import { RootState, useAppDispatch } from '../store/store'
 import { BranchsType, getPublishVacanciesTC, setFilterAC } from '../Reducer/initialazedReducer'
-import React, { useEffect }  from 'react'
-import { IconChevronDown } from '@tabler/icons-react'
 import vectorSelect  from '../assets/VectorSelect.svg'
 import VectorSelectDone  from '../assets/VectorSelectDone.svg'
 import Filternone  from '../assets/filter-none.svg'
 
-export default function FilterVacancies(props: any) {
+
+/* ------- INTRODUCTION ------- */
+/*
+	The component in which the filter is implemented
+*/
+export default function FilterVacancies() {
 	const dispatch = useAppDispatch()
 
-	const page = useSelector<RootState, number>(state => state.initialazed.curentPageVacancies)
+	// filter dates
 	const Branches = useSelector<RootState, Array<BranchsType>>(state => state.initialazed.branchs)
-
 	const selectBranch = useSelector<RootState, number>(state => state.initialazed.filter.selectBranch)
 	const payment_from = useSelector<RootState, number>(state => state.initialazed.filter.startPrice)
 	const payment_to = useSelector<RootState, number>(state => state.initialazed.filter.endPrice)
+
+	// search value
 	const searchValue = useSelector<RootState, string>(state => state.initialazed.filter.inputSearchValue)
-	const [value, setValue] = React.useState<string | null>(null)
+
+	// State for control position select input
 	const [valueSelectInput, setValueSelectInput] = React.useState<boolean>(false)
 
 	const handleSelectInput=()=>{
@@ -32,26 +36,24 @@ export default function FilterVacancies(props: any) {
 		setValueSelectInput(false)
 	}
 
+	// set in formik SelectBranch  
 	const ChangeC = (name: string | null ) => {
-		setValue(name)
 		setValueSelectInput(false)
 		formik.setValues({SelectBranch:name?name:"",endPrice:formik.values.endPrice,startPrice:formik.values.startPrice})
 	}
 
+	// Clear filter values
 	const ClearAllValues=()=>{
 		dispatch(setFilterAC(0,0,0,searchValue))
 		formik.setValues({SelectBranch:"",endPrice:0,startPrice:0})
 	}
 
-	type FormikErrorType = {
-        startPrice?: string
-    }
+
     const formik = useFormik({
+
         validate: (values) => {
             const errors: FormikErrorType = {};
-            // if (values.startPrice>values.endPrice) {
-            //     errors.startPrice = 'Required';
-            // } 
+            // no validate
             return errors;
         },
         initialValues: {
@@ -64,24 +66,23 @@ export default function FilterVacancies(props: any) {
             dispatch(getPublishVacanciesTC(0,Number(values.SelectBranch),values.startPrice,values.endPrice,searchValue))
         },
     })
+
 	useEffect(()=>{
 		formik.setValues({SelectBranch:String(selectBranch),endPrice:payment_to,startPrice:payment_from})
 	},[])
+
 	return (
 		<div className='filter'>
 			<div className='filter-container'>
-			<form onSubmit={formik.handleSubmit}>
-				
+				<form onSubmit={formik.handleSubmit}>
 					<div className='Name-Filter'>
 						<p className='Name-Filter-fiter'>Фильтры</p>
-						
-							<Button sx={{width:'115px',height:'20px', margin:'0px',padding:'0px'}}  onClick={ClearAllValues} variant="subtle">
-								<div className='filter-div'>
+						<Button sx={{width:'115px',height:'20px', margin:'0px',padding:'0px'}}  onClick={ClearAllValues} variant="subtle">
+							<div className='filter-div'>
 								<p className='filter-none'>Сбросить все</p>
 								<img className='filter-img-none' src={Filternone} alt="Filternone" />
-								</div>
-							</Button>
-						
+							</div>
+						</Button>					
 					</div>
 
 					<div className='OTR'>
@@ -149,4 +150,9 @@ export default function FilterVacancies(props: any) {
 			</div>
 		</div>
 	)
+}
+
+// types 
+type FormikErrorType = {
+	startPrice?: string
 }

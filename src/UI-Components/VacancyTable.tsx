@@ -1,34 +1,42 @@
 import { useSelector } from "react-redux"
-import { RootState, useAppDispatch } from "../store/store"
-import { VacancyDataType, deleteStateSavedVacanciesAC, getCurrentsVacanciesTC, getPublishVacanciesTC, setArrayIdAC, statusType } from "../Reducer/initialazedReducer"
-import location from '../assets/Location.png'
 import React, { useEffect, useState } from "react"
-import {Link, Navigate, useNavigate} from "react-router-dom";
-import { StarForSaveVacancy } from "./StarsForSaveVacancy"
+import {useNavigate} from "react-router-dom";
 import { nanoid } from 'nanoid'
-import { useTransition, animated } from "react-spring";
-import { PaginatorForSaveVacancies } from "./Paginator"
 import { Skeleton } from "@mantine/core"
 
+import { RootState, useAppDispatch } from "../store/store"
+import { VacancyDataType, deleteStateSavedVacanciesAC, getCurrentsVacanciesTC, setArrayIdAC, statusType } from "../Reducer/initialazedReducer"
+import location from '../assets/Location.png'
+import { StarForSaveVacancy } from "./StarsForSaveVacancy"
+import { PaginatorForSaveVacancies } from "./Paginator"
 
+
+/* ------- INTRODUCTION ------- */
+/*
+	This component is responsible table vacancies for main page
+*/
 export const VacancyTable= React.memo(()=>{
+
     const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
     const progress = useSelector<RootState, statusType>(state => state.initialazed.status)
 
+	// navigate fot more info about vacancy
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
 		const v=JSON.stringify(ListofVacancies[id])
 		navigate(`/Info/${encodeURIComponent(v)}`)  
 	}
 
-
+	//get array saved vacancy 
 	let mi_array:any=[]
     const currentData  = localStorage.getItem("Id_Vacancies")
     mi_array = currentData ? JSON.parse(currentData) : [];
+
     return <>
-    {ListofVacancies.map((item,index)=>{
+ {ListofVacancies.map((item,index)=>{
 							return <div key={item.id} className='Main-margin'>
-{progress=='succeeded'?
+						{progress=='succeeded'
+							?
 							<div className='Info-Vacancy'>
 								<div className='Name-and-Stars'>
 									<p onClick={()=>Redirect(index)} >{item.profession}</p>
@@ -55,8 +63,8 @@ export const VacancyTable= React.memo(()=>{
 									<Skeleton height={8}   width="70%" mb="xl" />
 									<Skeleton height={15} circle width="20px" mb="xl" />
 								</div>
-    							<Skeleton height={8}  width="30%" mb="md" />
-    							<Skeleton height={8}  width="15%" mb="md" />
+							<Skeleton height={8}  width="30%" mb="md" />
+	<Skeleton height={8}  width="15%" mb="md" />
 								
 							</div>
 							}
@@ -66,11 +74,13 @@ export const VacancyTable= React.memo(()=>{
     </>
 })
 
-
+/* ------- INTRODUCTION ------- */
+/*
+	This component is responsible table vacancies for saved page
+*/
 export const SavedTableVacancies= React.memo((props:{arrayId:Array<string>})=>{
-	
-	//dependens 
 	const dispatch = useAppDispatch()
+
 	const arrayIdFormRedux = useSelector<RootState, Array<string>>(state => state.initialazed.savedVacancies.arrayId)
 	const currentPage = useSelector<RootState, number>(state => state.initialazed.savedVacancies.currentPage)
 	const Vacancy = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.savedVacancies.vacancies)
@@ -165,9 +175,8 @@ export const SavedTableVacancies= React.memo((props:{arrayId:Array<string>})=>{
 									<Skeleton height={8}   width="70%" mb="xl" />
 									<Skeleton height={15} circle width="20px" mb="xl" />
 								</div>
-    							<Skeleton height={8}  width="30%" mb="md" />
-    							<Skeleton height={8}  width="15%" mb="md" />
-								
+							<Skeleton height={8}  width="30%" mb="md" />
+    <Skeleton height={8}  width="15%" mb="md" />	
 							</div>
 							}
 						</div>

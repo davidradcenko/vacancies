@@ -1,13 +1,14 @@
 import { useSelector } from "react-redux"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState,memo } from "react"
 import {useNavigate} from "react-router-dom";
 import { nanoid } from 'nanoid'
 import { Skeleton } from "@mantine/core"
 
+
 import { RootState, useAppDispatch } from "../store/store"
 import { VacancyDataType, deleteStateSavedVacanciesAC, getCurrentsVacanciesTC, setArrayIdAC, statusType } from "../Reducer/initialazedReducer"
-import location from '../assets/Location.png'
-import { StarForSaveVacancy } from "./StarsForSaveVacancy"
+import location from '../img/Location.png'
+import { StarForSaveVacancy,StarForMainSaveVacancy } from "./StarsForSaveVacancy"
 import { PaginatorForSaveVacancies } from "./Paginator"
 
 
@@ -15,7 +16,7 @@ import { PaginatorForSaveVacancies } from "./Paginator"
 /*
 	This component is responsible table vacancies for main page
 */
-export const VacancyTable= React.memo(()=>{
+export const VacancyTable= memo(()=>{
 
     const ListofVacancies = useSelector<RootState, Array<VacancyDataType>>(state => state.initialazed.currentVacancies)
     const progress = useSelector<RootState, statusType>(state => state.initialazed.status)
@@ -24,7 +25,7 @@ export const VacancyTable= React.memo(()=>{
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
 		const v=JSON.stringify(ListofVacancies[id])
-		navigate(`/Info/${encodeURIComponent(v)}`)  
+		navigate(`/Info/${encodeURIComponent(v)}`,{state:{from:'main'}})  
 	}
 
 	//get array saved vacancy 
@@ -34,13 +35,15 @@ export const VacancyTable= React.memo(()=>{
 
     return <>
  {ListofVacancies.map((item,index)=>{
-							return <div key={item.id} className='Main-margin'>
+	const dataElemId=`vacancy-${item.id}`
+	const dataElemSave=`vacancy-${item.id}-shortlist-button`
+							return <div data-elem={dataElemId}    key={item.id} className='Main-margin'>
 						{progress=='succeeded'
 							?
 							<div className='Info-Vacancy'>
 								<div className='Name-and-Stars'>
 									<p onClick={()=>Redirect(index)} >{item.profession}</p>
-									<StarForSaveVacancy id={item.id} active={mi_array.includes(item.id)?true:false}/>
+									<StarForMainSaveVacancy dataIlement={dataElemSave}   id={item.id} active={mi_array.includes(item.id)?true:false}/>
 								</div>
 
 								<div className='Salary-and-TypeWork'>
@@ -78,7 +81,7 @@ export const VacancyTable= React.memo(()=>{
 /*
 	This component is responsible table vacancies for saved page
 */
-export const SavedTableVacancies= React.memo((props:{arrayId:Array<string>})=>{
+export const SavedTableVacancies= memo(()=>{
 	const dispatch = useAppDispatch()
 
 	const arrayIdFormRedux = useSelector<RootState, Array<string>>(state => state.initialazed.savedVacancies.arrayId)
@@ -94,7 +97,7 @@ export const SavedTableVacancies= React.memo((props:{arrayId:Array<string>})=>{
 	const navigate = useNavigate();
 	const Redirect=(id:number)=>{
 		const v=JSON.stringify(Vacancy[id])
-		navigate(`/Info/${encodeURIComponent(v)}`)  
+		navigate(`/Info/${encodeURIComponent(v)}`,{state:{from:'savePage'}})  
 	}
 
 	
@@ -147,12 +150,14 @@ export const SavedTableVacancies= React.memo((props:{arrayId:Array<string>})=>{
 
     return <>
     {nowArray.map((item,index)=>{
-						return <div key={nanoid()} className='Main-margin'>
+		const dataElemId=`vacancy-${item.id}`
+		const dataElemSave=`vacancy-${item.id}-shortlist-button`
+						return <div data-elem={dataElemId} key={nanoid()} className='Main-margin'>
 							{progress=='succeeded'?
 							<div className='Info-Vacancy'>
 								<div className='Name-and-Stars'>
 									<p onClick={()=>Redirect(index)} >{item.profession}</p>
-									<StarForSaveVacancy id={item.id} active={numberArray.includes((item.id))?true:false}/>
+									<StarForSaveVacancy dataIlement={dataElemSave} id={item.id} active={numberArray.includes((item.id))?true:false}/>
 								</div>
 
 								<div className='Salary-and-TypeWork'>

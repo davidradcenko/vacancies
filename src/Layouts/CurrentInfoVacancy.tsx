@@ -1,9 +1,9 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams  } from 'react-router-dom'
 
-import location from '../assets/Location.png'
+import locationImg from '../img/Location.png'
 
 import { VacancyDataType } from '../Reducer/initialazedReducer'
-import { StarForSaveVacancy } from '../UI-Components/StarsForSaveVacancy'
+import { StarForMainSaveVacancy, StarForSaveVacancy } from '../UI-Components/StarsForSaveVacancy'
 
 
 /* ------- INTRODUCTION ------- */
@@ -19,7 +19,12 @@ export const CurrentInfoVacancy=()=> {
 	let vacancy:VacancyDataType={id:1,profession:"",payment_from:1,currency:'rub' ,type_of_work:"string",town:"string",MoreInfo:"string",payment_to:1}
 	const {abject} =  useParams<"abject">()
 
-	
+	//form ?
+	const location = useLocation()
+	const {state}=location
+
+	const fromURL= state?.from 
+
 	// In the case of an empty object taken from the url, a redirect occurs back
 	if (!abject){
 		navigate(-1)
@@ -40,7 +45,12 @@ return (
 			<div className='Main-Info-Container'>
 				<div className='Main-Info-Name-and-Stars'>
 					<p>{vacancy.profession}</p>
-					<StarForSaveVacancy id={vacancy.id} active={mi_array.includes(vacancy.id)?true:false}/>
+					{
+						fromURL=='main'
+						?<StarForMainSaveVacancy dataIlement={String(vacancy.id)}  id={vacancy.id} active={mi_array.includes(vacancy.id)?true:false}/>
+						:<StarForSaveVacancy dataIlement={String(vacancy.id)}  id={vacancy.id} active={mi_array.includes(vacancy.id)?true:false}/>
+					}
+					
 				</div>
 
 				<div className='Main-Info-Salary-and-TypeWork'>
@@ -53,7 +63,7 @@ return (
 				</div>
 
 				<div className='Main-Info-location'>
-					<img src={location} alt='location' />
+					<img src={locationImg} alt='location' />
 					<p>{vacancy.town}</p>
 				</div>
 			</div>

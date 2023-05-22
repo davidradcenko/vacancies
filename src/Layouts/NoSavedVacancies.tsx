@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import Notfound from '../assets/NoSavedVacancy.png'
+import Notfound from '../img/NoSavedVacancy.png'
 
 /* INTRODUCTION */
 /*

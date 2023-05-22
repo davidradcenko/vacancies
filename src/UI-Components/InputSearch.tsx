@@ -37,15 +37,16 @@ export default function InputSearch() {
 	},[])
 	return (
 		<Input
+			data-elem='search-input'
 			icon={<IconSearch size='1rem' />}
 			sx={{ maxWidth: '100%',height:'48px' }}
 			placeholder='Введите название вакансии'
 			value={value}
-			onChange={(e)=>handleChange(e.target.value)}
+			onChange={(e:any)=>handleChange(e.target.value)}
 			rightSection={
 				
 					<div className='SearchButton'>
-						<Button onClick={SearchVacancy} sx={{ marginRight: 12 }}>Поиск</Button>
+						<Button data-elem='search-button' onClick={SearchVacancy} sx={{ marginRight: 12 }}>Поиск</Button>
 					</div>
 				
 			}

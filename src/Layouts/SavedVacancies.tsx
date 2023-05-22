@@ -29,7 +29,7 @@ export default function SavedVacancies() {
 			?<NoSavedVacancies />
 			:<div className='vacansiesContainer'>
 				<div className='vacansies-container'>
-					<SavedTableVacancies arrayId={mi_array}/>
+					<SavedTableVacancies />
 				</div>
 			</div> 
 		}	

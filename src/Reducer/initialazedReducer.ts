@@ -201,7 +201,6 @@ export const getPublishVacanciesTC = (currentPage:number,catalogues=0,payment_fr
 export const NewArrayOfIDs = (IdsArray:Array<string>,currentPage:number) => {
 	return (dispatch: Dispatch<actionTypes>) => {
 		dispatch(statusUserAC('loading'))
-
 		let iteral=0
 		let start=(currentPage*4)-4
 		if(currentPage==1){
@@ -227,7 +226,6 @@ export const NewArrayOfIDs = (IdsArray:Array<string>,currentPage:number) => {
 					MoreInfo:res.data.vacancyRichText,
 					payment_to:res.data.payment_to
 				}]
-				const totalPage=10000
 				
 				dispatch(setListVacanciesV2(resData))
 				dispatch(errorUserAC(null))
@@ -240,6 +238,7 @@ export const NewArrayOfIDs = (IdsArray:Array<string>,currentPage:number) => {
 
 
 		}
+		dispatch(statusUserAC('succeeded'))
 		dispatch(setCurrentPageSavedVacancies(currentPage))
 		dispatch(setArrayIdAC(IdsArray))
 
@@ -262,7 +261,7 @@ export const getCurrentsVacanciesTC = (arrayVacancy:number) => {
 					MoreInfo:res.data.vacancyRichText,
 					payment_to:res.data.payment_to
 				}]
-				const totalPage=10000
+				
 				
 				dispatch(setListVacanciesV2(resData))
 				dispatch(errorUserAC(null))

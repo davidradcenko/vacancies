@@ -110,6 +110,9 @@ ul {
 	width: 773px;
 	margin-left: 28px;
 }
+.Name-and-Stars button{
+	border: none;
+}
 
 .vacansiesContainer{
 	margin: 10px;

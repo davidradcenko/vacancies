@@ -2,7 +2,8 @@ import { useEffect } from 'react'
 import {NavLink, Navigate, Route, Routes} from "react-router-dom";
 import {memo} from "react";
 
-import logo from './assets/logo.svg'
+// import logo from '../assets/logo.svg'
+ import logo from './img/logo.svg'
 
 import { useAppDispatch } from './store/store'
 import MainPage from './Layouts/MainPage'
@@ -48,7 +49,7 @@ const  App = memo(()=> {
 				<Route path="/Info/:abject" element={<CurrentInfoVacancy />}/>
 				<Route path="/Saved/*" element={<SavedVacancies />}/>
 
-				<Route path="/404" element={<h1>404. Page not found</h1>}/>
+				<Route path="/404" element={<h1 style={{textAlign:"center",marginTop:"20px"}}>404. Page not found</h1>}/>
                 <Route path="*" element={<Navigate to="/404"/>}/>
 			</Routes>
 			

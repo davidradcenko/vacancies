@@ -1,13 +1,13 @@
 import { Box, Button, Flex, NumberInput, Select } from '@mantine/core'
 import { useFormik } from 'formik'
 import { useSelector } from 'react-redux'
-import React, { useEffect }  from 'react'
+import { useEffect,useState }  from 'react'
 
 import { RootState, useAppDispatch } from '../store/store'
 import { BranchsType, getPublishVacanciesTC, setFilterAC } from '../Reducer/initialazedReducer'
-import vectorSelect  from '../assets/VectorSelect.svg'
-import VectorSelectDone  from '../assets/VectorSelectDone.svg'
-import Filternone  from '../assets/filter-none.svg'
+import vectorSelect  from '../img/VectorSelect.svg'
+import VectorSelectDone  from '../img/VectorSelectDone.svg'
+import Filternone  from '../img/filter-none.svg'
 
 
 /* ------- INTRODUCTION ------- */
@@ -27,7 +27,7 @@ export default function FilterVacancies() {
 	const searchValue = useSelector<RootState, string>(state => state.initialazed.filter.inputSearchValue)
 
 	// State for control position select input
-	const [valueSelectInput, setValueSelectInput] = React.useState<boolean>(false)
+	const [valueSelectInput, setValueSelectInput] = useState<boolean>(false)
 
 	const handleSelectInput=()=>{
 		setValueSelectInput(!valueSelectInput)
@@ -51,7 +51,7 @@ export default function FilterVacancies() {
 
     const formik = useFormik({
 
-        validate: (values) => {
+        validate: () => {
             const errors: FormikErrorType = {};
             // no validate
             return errors;
@@ -87,17 +87,18 @@ export default function FilterVacancies() {
 
 					<div className='OTR'>
 						<Select
+						
 							label='Отрасль'
+							data-elem='industry-select'
 							nothingFound='No options'
 							rightSection={<img src={valueSelectInput?VectorSelectDone:vectorSelect}/>}
 							transitionProps={{ transition: 'pop-top-left', duration: 80, timingFunction: 'ease' }}
 							value={formik.values.SelectBranch}
-							onChange={(e)=>ChangeC(e)}
+							onChange={(e:any)=>ChangeC(e)}
 							data={Branches}
 							onDropdownOpen={handleSelectInput}
 							onDropdownClose={handleSelectInput1}
 							placeholder="Выберите отрасль"
-							data-elem="industry-select"
 							sx={{borderRadius:'8px'}}
 							styles={{
 								item: {
@@ -117,24 +118,25 @@ export default function FilterVacancies() {
 							inputMode='numeric'
 							pattern='[0-9]*'
 							stepHoldInterval={100}
-							
+							data-elem='salary-from-input'
 							sx={{ marginBottom: 10,borderRadius:'8px',".mantine-x0i9fi,.mantine-1g3thxc":{border:'none',color:"#ACADB9"} }}
 							step={1000}
 							min={0}
 							defaultValue={0}
-							onChange={(e)=>formik.setValues({SelectBranch:formik.values.SelectBranch,endPrice:formik.values.endPrice,startPrice:e?e:0})}
+							onChange={(e:any)=>formik.setValues({SelectBranch:formik.values.SelectBranch,endPrice:formik.values.endPrice,startPrice:e?e:0})}
 							value={formik.values.startPrice==0?'':formik.values.startPrice}
 						/>
 						<NumberInput
 							placeholder={'До'}
+							data-elem='salary-to-input'
 							stepHoldDelay={500}
 							step={1000}
 							inputMode='numeric'
 							pattern='[0-9]*'
 							min={0}
-							stepHoldInterval={t => Math.max(1000 / t ** 2, 25)}
+							stepHoldInterval={(t:any) => Math.max(1000 / t ** 2, 25)}
 							sx={{ marginBottom: 20,borderRadius:'8px',".mantine-x0i9fi,.mantine-1g3thxc":{border:'none',color:"#ACADB9"} }}
-							onChange={(e)=>formik.setValues({SelectBranch:formik.values.SelectBranch,endPrice:e?e:0,startPrice:formik.values.startPrice})}
+							onChange={(e:any)=>formik.setValues({SelectBranch:formik.values.SelectBranch,endPrice:e?e:0,startPrice:formik.values.startPrice})}
 							value={formik.values.endPrice==0?'':formik.values.endPrice}
 						/>
 						<p>{formik.errors.startPrice}</p>
@@ -142,7 +144,7 @@ export default function FilterVacancies() {
 
 					<Flex gap='md'>
 						<Box w={250}>
-							<Button type="submit" fullWidth>Применить</Button>
+							<Button data-elem='search-button' type="submit" fullWidth>Применить</Button>
 						</Box>
 					</Flex>
 				
